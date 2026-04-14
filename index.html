@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClipDock by BLITAST｜撮影なしで、使いやすい短尺動画を毎月納品</title>
+<meta name="description" content="投稿用、広告用、求人用に使いやすい6〜8秒の縦型クリップを、用途別に整理して毎月納品。撮影不要で始められる短尺動画の定期供給サービス。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0a0a0a; --ink-mid: #3a3a3a; --ink-soft: #7a7a7a;
+  --paper: #f7f5f0; --paper-mid: #edeae2;
+  --navy: #111e3a; --navy-mid: #1a2d55; --navy-light: #243870;
+  --accent: #c8a96e; --accent-soft: #e8d9bc; --accent-glow: rgba(200,169,110,0.25);
+  --white: #ffffff; --rule: rgba(0,0,0,0.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);line-height:1.6;overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--navy);}::-webkit-scrollbar-thumb{background:var(--accent);}
+
+/* CURSOR GLOW */
+.cursor-glow{position:fixed;width:500px;height:500px;background:radial-gradient(circle,rgba(200,169,110,0.05) 0%,transparent 70%);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);z-index:0;transition:opacity 0.3s;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:22px 56px;background:rgba(8,12,28,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.05);transition:padding 0.3s,background 0.3s;}
+nav.scrolled{padding:14px 56px;background:rgba(8,12,28,0.95);}
+.nav-brand{display:flex;flex-direction:column;gap:2px;}
+.nav-brand-main{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:0.02em;color:var(--white);}
+.nav-brand-sub{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.18em;color:var(--accent);text-transform:uppercase;}
+.nav-links{display:flex;align-items:center;gap:36px;list-style:none;}
+.nav-links a{font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);text-decoration:none;letter-spacing:0.02em;transition:color 0.2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-cta{background:var(--accent)!important;color:var(--navy)!important;padding:10px 24px;border-radius:3px;font-weight:700!important;}
+.nav-cta:hover{opacity:0.85;}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding-top:80px;}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 90% 70% at 15% 50%,rgba(26,45,85,0.95) 0%,transparent 55%),radial-gradient(ellipse 60% 80% at 85% 20%,rgba(200,169,110,0.1) 0%,transparent 50%),radial-gradient(ellipse 50% 50% at 65% 85%,rgba(35,55,110,0.5) 0%,transparent 55%),linear-gradient(140deg,#060a18 0%,#0d1a30 45%,#080f20 100%);z-index:0;}
+.hero-grid{position:absolute;inset:0;z-index:1;background-image:linear-gradient(rgba(255,255,255,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.022) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,black 30%,transparent 100%);}
+.hero-noise{position:absolute;inset:0;z-index:2;opacity:0.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px 180px;}
+.particles{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;}
+.particle{position:absolute;border-radius:50%;background:var(--accent);opacity:0;animation:float-particle linear infinite;}
+@keyframes float-particle{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:0.35;}90%{opacity:0.08;}100%{transform:translateY(-5vh) rotate(720deg);opacity:0;}}
+
+/* 動画プレースホルダーノート */
+/* ★ <video autoplay muted loop playsinline src="hero-loop.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.25;z-index:0;"> を追加すると背景動画になります */
+
+.hero-content{position:relative;z-index:20;text-align:center;padding:0 24px;max-width:960px;}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.25em;color:var(--accent);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;justify-content:center;gap:16px;}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:40px;height:1px;background:var(--accent);opacity:0.5;}
+.hero-title{font-family:'DM Serif Display',serif;font-size:clamp(42px,7vw,90px);line-height:1.07;margin-bottom:28px;}
+.hero-title em{font-style:italic;color:var(--accent);}
+.hero-sub{font-size:clamp(15px,1.5vw,18px);color:rgba(255,255,255,0.5);line-height:1.9;margin-bottom:56px;}
+.hero-actions{display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap;}
+
+.btn-accent{background:var(--accent);color:var(--navy);padding:18px 44px;border-radius:3px;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:0.04em;transition:all 0.25s;display:inline-block;position:relative;overflow:hidden;}
+.btn-accent::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.18);transform:translateX(-100%) skewX(-15deg);transition:transform 0.4s;}
+.btn-accent:hover::after{transform:translateX(100%) skewX(-15deg);}
+.btn-accent:hover{transform:translateY(-2px);box-shadow:0 14px 44px rgba(200,169,110,0.35);}
+.btn-ghost-white{color:rgba(255,255,255,0.55);font-size:14px;text-decoration:none;border:1px solid rgba(255,255,255,0.15);padding:17px 36px;border-radius:3px;transition:all 0.25s;letter-spacing:0.03em;}
+.btn-ghost-white:hover{color:var(--white);border-color:rgba(255,255,255,0.4);}
+
+/* SCROLL INDICATOR */
+.scroll-indicator{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:1;}
+.scroll-indicator span{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.22em;color:rgba(255,255,255,0.25);text-transform:uppercase;}
+.scroll-line{width:1px;height:52px;background:linear-gradient(to bottom,rgba(200,169,110,0.7),transparent);animation:scroll-pulse 2.2s ease-in-out infinite;}
+@keyframes scroll-pulse{0%,100%{transform:scaleY(1);opacity:0.7;}50%{transform:scaleY(0.4);opacity:0.15;}}
+
+/* CLIPS MARQUEE */
+.clips-strip{background:#070c1a;padding:48px 0;overflow:hidden;border-top:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04);}
+.clips-track{display:flex;gap:14px;animation:marquee-clips 22s linear infinite;width:max-content;}
+.clips-track:hover{animation-play-state:paused;}
+@keyframes marquee-clips{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.clip-thumb{width:68px;aspect-ratio:9/16;border-radius:8px;position:relative;overflow:hidden;flex-shrink:0;cursor:pointer;transition:transform 0.3s,box-shadow 0.3s;border:1px solid rgba(255,255,255,0.06);}
+.clip-thumb:hover{transform:scale(1.1) translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.5);}
+.clip-thumb-inner{width:100%;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:7px;position:relative;}
+.clip-thumb:nth-child(7n+1) .clip-thumb-inner{background:linear-gradient(160deg,#1a3a6a,#2d6ab0);}
+.clip-thumb:nth-child(7n+2) .clip-thumb-inner{background:linear-gradient(160deg,#3a1a5a,#8a3db0);}
+.clip-thumb:nth-child(7n+3) .clip-thumb-inner{background:linear-gradient(160deg,#1a4a2a,#2db06a);}
+.clip-thumb:nth-child(7n+4) .clip-thumb-inner{background:linear-gradient(160deg,#4a2a1a,#b06a2d);}
+.clip-thumb:nth-child(7n+5) .clip-thumb-inner{background:linear-gradient(160deg,#1a2a4a,#3d6ab0);}
+.clip-thumb:nth-child(7n+6) .clip-thumb-inner{background:linear-gradient(160deg,#4a1a2a,#b03d6a);}
+.clip-thumb:nth-child(7n+0) .clip-thumb-inner{background:linear-gradient(160deg,#2a3a1a,#6ab03d);}
+.clip-play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:26px;height:26px;background:rgba(255,255,255,0.13);border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.clip-play-btn::after{content:'';width:0;height:0;border-style:solid;border-width:4px 0 4px 8px;border-color:transparent transparent transparent rgba(255,255,255,0.85);margin-left:2px;}
+.clip-thumb-tag{font-family:'Space Mono',monospace;font-size:6.5px;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;background:rgba(0,0,0,0.4);padding:2px 5px;border-radius:2px;display:inline-block;}
+.clip-thumb-dur{font-family:'Space Mono',monospace;font-size:6.5px;color:rgba(255,255,255,0.35);margin-top:2px;}
+
+/* MARQUEE TEXT */
+.marquee-section{overflow:hidden;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);padding:18px 0;background:rgba(255,255,255,0.015);}
+.marquee-track{display:flex;animation:marquee 28s linear infinite;width:max-content;}
+.marquee-item{display:flex;align-items:center;gap:28px;padding:0 28px;white-space:nowrap;font-family:'DM Serif Display',serif;font-size:14px;letter-spacing:0.05em;color:rgba(255,255,255,0.2);}
+.marquee-dot{color:var(--accent);font-size:9px;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* SECTION BASE */
+section{position:relative;}
+.section-inner{max-width:1200px;margin:0 auto;padding:120px 80px;}
+.section-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.22em;color:var(--accent);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:14px;}
+.section-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--accent);opacity:0.6;}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(30px,3.5vw,52px);line-height:1.15;margin-bottom:18px;}
+.section-sub{font-size:15px;color:rgba(255,255,255,0.4);line-height:1.85;max-width:500px;}
+
+/* REVEAL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(44px);transition:opacity 0.75s ease,transform 0.75s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:0.1s;}.reveal-delay-2{transition-delay:0.2s;}.reveal-delay-3{transition-delay:0.3s;}.reveal-delay-4{transition-delay:0.4s;}
+.reveal-left{opacity:0;transform:translateX(-44px);transition:opacity 0.75s ease,transform 0.75s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+@keyframes heroReveal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+/* TITLE REVEAL — 行単位マスクリビール */
+.title-reveal-wrap{overflow:hidden;display:block;}
+@keyframes titleLineUp{
+  from{opacity:0;transform:translateX(-32px) skewX(-2deg);}
+  to{opacity:1;transform:translateX(0) skewX(0deg);}
+}
+.title-reveal-line{
+  display:block;
+  opacity:0;
+  transform:translateX(-32px) skewX(-2deg);
+  will-change:transform,opacity;
+}
+.title-reveal-line.in{
+  animation:titleLineUp 0.82s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+/* USECASES */
+.usecases-section{background:var(--paper);color:var(--ink);}
+.usecases-section .section-title{color:var(--navy);}
+.usecases-section .section-sub{color:var(--ink-soft);}
+.usecases-section .section-eyebrow{color:var(--accent);}
+.usecases-section .section-eyebrow::before{background:var(--accent);}
+.usecases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(0,0,0,0.08);border:1px solid rgba(0,0,0,0.08);margin-top:64px;}
+.usecase-item{background:var(--white);padding:44px 36px;transition:background 0.3s,transform 0.3s;cursor:default;}
+.usecase-item:hover{background:var(--paper);transform:translateY(-3px);}
+.usecase-num{font-family:'DM Serif Display',serif;font-size:52px;color:var(--paper-mid);line-height:1;margin-bottom:24px;transition:color 0.3s;}
+.usecase-item:hover .usecase-num{color:var(--accent-soft);}
+.usecase-title{font-size:16px;font-weight:600;color:var(--navy);margin-bottom:12px;}
+.usecase-desc{font-size:14px;color:var(--ink-soft);line-height:1.8;}
+
+/* MONITOR BAND */
+.monitor-band{background:linear-gradient(135deg,#c8a96e 0%,#e8c97e 45%,#b8943a 100%);padding:80px;text-align:center;position:relative;overflow:hidden;}
+.monitor-band::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 10px,rgba(255,255,255,0.04) 10px,rgba(255,255,255,0.04) 20px);}
+.monitor-band .section-eyebrow{justify-content:center;color:rgba(26,39,68,0.6);}
+.monitor-band .section-eyebrow::before{background:rgba(26,39,68,0.3);}
+.monitor-title{font-family:'DM Serif Display',serif;font-size:clamp(28px,3.5vw,48px);color:var(--navy);line-height:1.2;margin-bottom:16px;}
+.monitor-desc{font-size:15px;color:rgba(26,39,68,0.6);margin-bottom:40px;line-height:1.8;max-width:460px;margin-left:auto;margin-right:auto;}
+.btn-navy{background:var(--navy);color:var(--white);padding:18px 44px;border-radius:3px;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:0.04em;display:inline-block;transition:all 0.25s;}
+.btn-navy:hover{background:var(--navy-light);transform:translateY(-2px);box-shadow:0 14px 44px rgba(17,30,58,0.3);}
+
+/* WORKFLOW */
+.workflow-section{background:linear-gradient(180deg,#0d1628 0%,#111e3a 100%);}
+.workflow-layout{display:grid;grid-template-columns:210px 1fr;gap:80px;align-items:start;margin-top:64px;}
+.workflow-nav{position:sticky;top:100px;display:flex;flex-direction:column;}
+.workflow-nav-item{display:flex;align-items:flex-start;gap:16px;padding:18px 0;cursor:pointer;transition:all 0.2s;position:relative;}
+.workflow-nav-item::before{content:'';position:absolute;left:9px;top:38px;bottom:-18px;width:1px;background:rgba(255,255,255,0.07);z-index:0;}
+.workflow-nav-item:last-child::before{display:none;}
+.workflow-nav-dot{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,0.13);background:transparent;flex-shrink:0;margin-top:2px;transition:all 0.3s;position:relative;z-index:1;}
+.workflow-nav-text{display:flex;flex-direction:column;gap:3px;}
+.workflow-nav-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.22);}
+.workflow-nav-label{font-size:13px;font-weight:500;color:rgba(255,255,255,0.3);transition:color 0.2s;line-height:1.4;}
+.workflow-nav-item.active .workflow-nav-dot{border-color:var(--accent);background:var(--accent);box-shadow:0 0 0 5px rgba(200,169,110,0.15),0 0 22px rgba(200,169,110,0.35);}
+.workflow-nav-item.active .workflow-nav-num{color:var(--accent);}
+.workflow-nav-item.active .workflow-nav-label{color:var(--white);font-weight:600;}
+.workflow-steps{display:flex;flex-direction:column;gap:80px;}
+.workflow-step{opacity:0.25;transition:opacity 0.4s;}
+.workflow-step.active{opacity:1;}
+.step-header{display:flex;align-items:flex-start;gap:24px;margin-bottom:32px;}
+.step-num{font-family:'DM Serif Display',serif;font-size:84px;line-height:0.85;color:rgba(255,255,255,0.05);flex-shrink:0;margin-top:4px;}
+.step-phase{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:8px;}
+.step-title{font-family:'DM Serif Display',serif;font-size:28px;color:var(--white);line-height:1.2;}
+.step-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.step-tile{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:22px;transition:background 0.3s,border-color 0.3s;}
+.step-tile:hover{background:rgba(255,255,255,0.07);border-color:rgba(200,169,110,0.3);}
+.step-tile-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;color:var(--accent);text-transform:uppercase;margin-bottom:10px;}
+.step-tile-content{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;}
+
+/* WHY */
+.why-section{background:var(--paper);color:var(--ink);}
+.why-section .section-title{color:var(--navy);}
+.why-section .section-eyebrow{color:var(--accent);}
+.why-section .section-eyebrow::before{background:var(--accent);}
+
+/* WHY CAROUSEL */
+.why-section{background:var(--paper);color:var(--ink);}
+.why-section .section-title{color:var(--navy);}
+.why-section .section-eyebrow{color:var(--accent);}
+.why-section .section-eyebrow::before{background:var(--accent);}
+.why-carousel{margin-top:56px;}
+.why-track-wrap{overflow:hidden;}
+.why-track{display:flex;gap:16px;padding:8px 0 24px;transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;}
+.why-card{flex-shrink:0;width:280px;border:1px solid rgba(0,0,0,0.07);border-radius:16px;padding:32px 28px;background:var(--white);position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;}
+.why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#e8c97e);transform:scaleX(0);transform-origin:left;transition:transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);}
+.why-card:hover{border-color:rgba(200,169,110,0.4);transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.08);}
+.why-card:hover::before{transform:scaleX(1);}
+.why-card-featured{background:var(--navy);}
+.why-card-featured .why-card-num{color:rgba(200,169,110,0.4);}
+.why-card-featured .why-card-title{color:var(--white);}
+.why-card-featured .why-card-desc{color:rgba(255,255,255,0.5);}
+.why-card-featured .why-card-tag{background:rgba(200,169,110,0.15);color:var(--accent);border-color:rgba(200,169,110,0.2);}
+.why-card-featured::after{content:'★ Quality Standard';position:absolute;top:16px;right:16px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;color:var(--accent);}
+.why-card-featured:hover{border-color:rgba(200,169,110,0.4);box-shadow:0 16px 40px rgba(200,169,110,0.15);}
+.why-card-num{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;color:rgba(200,169,110,0.5);margin-bottom:20px;}
+.why-card-icon{font-size:24px;margin-bottom:20px;display:block;}
+.why-card-title{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.4;}
+.why-card-desc{font-size:13px;color:var(--ink-soft);line-height:1.75;}
+.why-card-tag{display:inline-block;margin-top:18px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;padding:4px 10px;border-radius:20px;border:1px solid rgba(0,0,0,0.08);background:var(--paper);color:var(--ink-soft);text-transform:uppercase;}
+.why-controls{display:flex;align-items:center;gap:16px;margin-top:24px;opacity:0.4;transition:opacity 0.3s;}
+.why-carousel:hover .why-controls{opacity:1;}
+.why-btn{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:14px;color:var(--ink-mid);}
+.why-btn:hover{background:var(--navy);color:var(--white);border-color:var(--navy);}
+.why-btn:disabled{opacity:0.25;cursor:default;}
+.why-dots{display:flex;gap:6px;align-items:center;}
+.why-dot{width:6px;height:6px;border-radius:50%;background:var(--paper-mid);transition:all 0.3s;cursor:pointer;border:none;}
+.why-dot.on{width:20px;border-radius:3px;background:var(--accent);}
+.why-progress{flex:1;height:1px;background:var(--paper-mid);position:relative;border-radius:1px;}
+.why-progress-fill{position:absolute;left:0;top:0;height:100%;background:var(--accent);border-radius:1px;transition:width 0.5s cubic-bezier(0.25,0.46,0.45,0.94);}
+
+/* PRICING */
+.pricing-section{background:linear-gradient(180deg,#111e3a 0%,#0d1628 100%);}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.05);margin-top:64px;}
+.pricing-card{background:rgba(255,255,255,0.03);padding:44px 32px;position:relative;transition:all 0.3s;}
+.pricing-card:hover{background:rgba(255,255,255,0.07);transform:translateY(-8px);box-shadow:0 28px 64px rgba(0,0,0,0.35);z-index:2;}
+.pricing-card.featured{background:rgba(200,169,110,0.07);border:1px solid rgba(200,169,110,0.18);}
+.pricing-card.featured:hover{background:rgba(200,169,110,0.12);}
+.pricing-badge{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.12em;padding:4px 10px;background:var(--accent);color:var(--navy);border-radius:2px;text-transform:uppercase;display:inline-block;margin-bottom:20px;}
+.pricing-plan{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-bottom:10px;}
+.pricing-price{font-family:'DM Serif Display',serif;font-size:38px;color:var(--white);margin-bottom:4px;line-height:1;}
+.pricing-card.featured .pricing-price{color:var(--accent);}
+.pricing-period{font-size:12px;color:rgba(255,255,255,0.28);margin-bottom:28px;}
+.pricing-divider{height:1px;background:rgba(255,255,255,0.06);margin-bottom:24px;}
+.pricing-features{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:36px;}
+.pricing-features li{font-size:13px;color:rgba(255,255,255,0.5);display:flex;align-items:flex-start;gap:10px;line-height:1.5;}
+.pricing-features li::before{content:'—';font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);flex-shrink:0;margin-top:2px;}
+.pricing-btn{display:block;text-align:center;padding:14px;border-radius:3px;font-size:13px;font-weight:600;text-decoration:none;letter-spacing:0.03em;border:1px solid rgba(255,255,255,0.13);color:rgba(255,255,255,0.55);transition:all 0.25s;}
+.pricing-btn:hover{border-color:var(--white);color:var(--white);}
+.pricing-card.featured .pricing-btn{background:var(--accent);border-color:var(--accent);color:var(--navy);}
+.pricing-card.featured .pricing-btn:hover{opacity:0.85;}
+.pricing-card.custom{
+  background:linear-gradient(145deg,rgba(200,169,110,0.06) 0%,rgba(255,255,255,0.02) 60%,rgba(200,169,110,0.04) 100%);
+  border:1px solid rgba(200,169,110,0.22);
+  position:relative;
+  overflow:hidden;
+}
+.pricing-card.custom::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(200,169,110,0.6),transparent);
+}
+.pricing-card.custom::after{
+  content:'Bespoke';
+  position:absolute;top:16px;right:16px;
+  font-family:'Space Mono',monospace;font-size:7px;letter-spacing:0.18em;
+  color:rgba(200,169,110,0.45);text-transform:uppercase;
+}
+.pricing-card.custom:hover{
+  background:linear-gradient(145deg,rgba(200,169,110,0.1) 0%,rgba(255,255,255,0.03) 60%,rgba(200,169,110,0.07) 100%);
+  border-color:rgba(200,169,110,0.4);
+  box-shadow:0 28px 64px rgba(200,169,110,0.08);
+}
+.pricing-card.custom .pricing-plan{color:rgba(200,169,110,0.7);letter-spacing:0.18em;}
+.pricing-card.custom .pricing-price{color:rgba(255,255,255,0.85) !important;font-size:20px !important;padding-top:12px;}
+.pricing-card.custom .pricing-period{color:rgba(255,255,255,0.45);}
+.pricing-card.custom .pricing-features li{color:rgba(255,255,255,0.7);}
+.pricing-card.custom .pricing-features li::before{color:rgba(200,169,110,0.6);}
+.pricing-card.custom .pricing-btn{
+  border-color:rgba(200,169,110,0.3);
+  color:rgba(200,169,110,0.7);
+  background:rgba(200,169,110,0.05);
+}
+.pricing-card.custom .pricing-btn:hover{
+  border-color:rgba(200,169,110,0.7);
+  color:var(--accent);
+  background:rgba(200,169,110,0.1);
+}
+.pricing-card.custom .pricing-divider{background:rgba(200,169,110,0.1);}
+.pricing-note{margin-top:32px;padding:20px 24px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:4px;font-size:13px;color:rgba(255,255,255,0.28);line-height:1.8;}
+
+/* FAQ */
+.faq-section{background:var(--paper);color:var(--ink);}
+.faq-section .section-title{color:var(--navy);}
+.faq-section .section-eyebrow{color:var(--accent);}
+.faq-section .section-eyebrow::before{background:var(--accent);}
+.faq-list{display:flex;flex-direction:column;max-width:800px;margin:56px auto 0;}
+.faq-item{border-bottom:1px solid rgba(0,0,0,0.08);}
+.faq-question{width:100%;display:flex;align-items:center;justify-content:space-between;padding:24px 0;background:none;border:none;cursor:pointer;text-align:left;gap:16px;}
+.faq-q-text{font-size:15px;font-weight:500;color:var(--navy);line-height:1.5;}
+.faq-icon{width:26px;height:26px;border:1px solid rgba(0,0,0,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.25s;font-size:15px;color:var(--ink-soft);}
+.faq-item.open .faq-icon{background:var(--navy);border-color:var(--navy);color:var(--white);transform:rotate(45deg);}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
+.faq-answer-inner{font-size:14px;color:var(--ink-soft);line-height:1.9;padding-bottom:24px;}
+
+/* CONTACT */
+.contact-section{background:var(--paper);color:var(--ink);border-top:1px solid rgba(0,0,0,0.06);}
+.contact-section .section-title{color:var(--navy);}
+.contact-section .section-eyebrow{color:var(--accent);}
+.contact-section .section-eyebrow::before{background:var(--accent);}
+.contact-section .section-sub{color:var(--ink-soft);}
+.contact-form{max-width:640px;margin:48px auto 0;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{margin-bottom:20px;}
+.form-label{display:block;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--ink-soft);text-transform:uppercase;margin-bottom:8px;}
+.form-input,.form-textarea,.form-select{width:100%;padding:14px 16px;border:1px solid var(--paper-mid);border-radius:3px;background:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color 0.2s;appearance:none;}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--navy);}
+.form-textarea{resize:vertical;min-height:120px;}
+.form-submit{width:100%;padding:18px;background:var(--navy);color:var(--white);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.04em;cursor:pointer;transition:all 0.25s;margin-top:8px;position:relative;overflow:hidden;}
+.form-submit::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.08);transform:translateX(-100%) skewX(-15deg);transition:transform 0.4s;}
+.form-submit:hover::after{transform:translateX(100%) skewX(-15deg);}
+.form-submit:hover{background:var(--navy-light);}
+
+/* FINAL CTA */
+.final-cta{background:linear-gradient(135deg,#060a18 0%,#111e3a 55%,#080f20 100%);padding:160px 80px;text-align:center;position:relative;overflow:hidden;}
+.final-cta::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(200,169,110,0.07) 0%,transparent 65%);pointer-events:none;}
+.final-cta-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.22em;color:var(--accent);text-transform:uppercase;margin-bottom:28px;}
+.final-cta-title{font-family:'DM Serif Display',serif;font-size:clamp(36px,5vw,68px);line-height:1.12;margin-bottom:24px;}
+.final-cta-sub{font-size:16px;color:rgba(255,255,255,0.38);margin-bottom:60px;line-height:1.9;max-width:420px;margin-left:auto;margin-right:auto;}
+.final-cta-actions{display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap;}
+.btn-outline-white{color:rgba(255,255,255,0.5);font-size:14px;text-decoration:none;border:1px solid rgba(255,255,255,0.14);padding:17px 36px;border-radius:3px;transition:all 0.25s;letter-spacing:0.03em;}
+.btn-outline-white:hover{color:var(--white);border-color:rgba(255,255,255,0.4);}
+
+/* FOOTER */
+footer{background:#050810;padding:40px 80px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.04);}
+.footer-brand{font-family:'DM Serif Display',serif;font-size:16px;color:rgba(255,255,255,0.22);}
+.footer-note{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.1);}
+
+/* MOBILE */
+@media(max-width:900px){
+  nav{padding:16px 24px;}.nav-links{display:none;}
+  .section-inner{padding:80px 24px;}
+  .hero-title{font-size:clamp(36px,8vw,56px);}
+  .usecases-grid,.why-grid{grid-template-columns:1fr;}
+  .pricing-grid{grid-template-columns:1fr 1fr;}
+  .workflow-layout{grid-template-columns:1fr;}
+  .workflow-nav{display:none;}.workflow-step{opacity:1;}
+  .step-tiles{grid-template-columns:1fr;}
+  .final-cta{padding:100px 24px;}
+  footer{flex-direction:column;gap:12px;text-align:center;padding:32px 24px;}
+  .form-row{grid-template-columns:1fr;}
+  .monitor-band{padding:60px 24px;}
+}
+@media(max-width:540px){.pricing-grid{grid-template-columns:1fr;}}
+/* FIRST MONTH SECTION */
+.firstmonth-section{background:linear-gradient(160deg,#0d1628 0%,#111e3a 50%,#0a1220 100%);position:relative;overflow:hidden;}
+.firstmonth-section::before{content:'';position:absolute;top:-300px;right:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(200,169,110,0.07) 0%,transparent 60%);pointer-events:none;}
+.firstmonth-section::after{content:'';position:absolute;bottom:-200px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(26,45,85,0.8) 0%,transparent 65%);pointer-events:none;}
+.firstmonth-inner{max-width:1200px;margin:0 auto;padding:100px 80px;position:relative;z-index:1;}
+
+.firstmonth-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+
+/* 左カラム */
+.firstmonth-left{}
+.firstmonth-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.22em;color:var(--accent);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:14px;}
+.firstmonth-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--accent);opacity:0.6;}
+.firstmonth-title{font-family:'DM Serif Display',serif;font-size:clamp(28px,3vw,46px);line-height:1.2;color:var(--white);margin-bottom:20px;}
+.firstmonth-title em{font-style:italic;color:var(--accent);}
+.firstmonth-body{font-size:15px;color:rgba(255,255,255,0.45);line-height:1.95;margin-bottom:36px;max-width:440px;}
+.firstmonth-body strong{color:rgba(255,255,255,0.8);font-weight:500;}
+.firstmonth-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.firstmonth-note{font-size:12px;color:rgba(255,255,255,0.28);line-height:1.7;}
+
+/* 右カラム — 体験イメージカード */
+.firstmonth-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:36px;position:relative;overflow:hidden;}
+.firstmonth-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,169,110,0.5),transparent);}
+.firstmonth-card-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:24px;}
+.firstmonth-steps{display:flex;flex-direction:column;gap:0;}
+.firstmonth-step{display:flex;align-items:flex-start;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.firstmonth-step:last-child{border-bottom:none;}
+.firstmonth-step-num{font-family:'DM Serif Display',serif;font-size:22px;color:rgba(200,169,110,0.25);flex-shrink:0;line-height:1;width:28px;}
+.firstmonth-step-body{}
+.firstmonth-step-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px;line-height:1.4;}
+.firstmonth-step-desc{font-size:12px;color:rgba(255,255,255,0.38);line-height:1.7;}
+.firstmonth-card-footer{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;}
+.firstmonth-card-result{font-family:'DM Serif Display',serif;font-size:15px;color:var(--accent);line-height:1.4;}
+.firstmonth-card-tag{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;padding:5px 12px;border-radius:20px;border:1px solid rgba(200,169,110,0.25);color:rgba(200,169,110,0.6);text-transform:uppercase;}
+
+@media(max-width:900px){
+  .firstmonth-layout{grid-template-columns:1fr;gap:40px;}
+  .firstmonth-inner{padding:80px 24px;}
+}
+
+/* STRATEGY BAND */
+.strategy-band{background:var(--paper);border-top:1px solid rgba(0,0,0,0.06);border-bottom:1px solid rgba(0,0,0,0.06);padding:56px 80px;}
+.strategy-band-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr auto;align-items:center;gap:48px;}
+.strategy-band-left{}
+.strategy-band-tag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;color:var(--accent);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.strategy-band-tag::before{content:'';display:block;width:20px;height:1px;background:var(--accent);opacity:0.5;}
+.strategy-band-title{font-family:'DM Serif Display',serif;font-size:clamp(20px,2.2vw,30px);color:var(--navy);line-height:1.35;margin-bottom:10px;}
+.strategy-band-title em{font-style:italic;color:var(--accent);}
+.strategy-band-desc{font-size:14px;color:var(--ink-soft);line-height:1.85;max-width:560px;}
+.strategy-band-desc strong{color:var(--ink-mid);font-weight:500;}
+.strategy-band-right{flex-shrink:0;}
+.strategy-band-cta{display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.strategy-band-note{font-size:11px;color:var(--ink-soft);text-align:right;line-height:1.6;}
+@media(max-width:900px){
+  .strategy-band{padding:48px 24px;}
+  .strategy-band-inner{grid-template-columns:1fr;gap:28px;}
+  .strategy-band-cta{align-items:flex-start;}
+  .strategy-band-note{text-align:left;}
+}
+
+/* AI INTRO SECTION */
+.ai-intro-section{background:var(--navy);color:var(--white);overflow:hidden;position:relative;}
+.ai-intro-section::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(200,169,110,0.06) 0%,transparent 65%);pointer-events:none;}
+.ai-intro-section .section-title{color:var(--white);}
+.ai-intro-section .section-eyebrow{color:var(--accent);}
+.ai-intro-section .section-eyebrow::before{background:var(--accent);}
+.ai-intro-section .section-sub{color:rgba(255,255,255,0.4);}
+
+/* AI INTRO — デモ映像ブロック */
+.ai-demo-video-wrap{position:relative;width:100%;border-radius:14px;overflow:hidden;margin-bottom:64px;border:1px solid rgba(255,255,255,0.08);box-shadow:0 32px 80px rgba(0,0,0,0.5);}
+.ai-demo-video-wrap video{width:100%;height:auto;display:block;}
+.ai-demo-video-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,10,24,0.15) 0%,transparent 30%,transparent 70%,rgba(6,10,24,0.55) 100%);pointer-events:none;}
+.ai-demo-video-caption{position:absolute;bottom:0;left:0;right:0;padding:24px 28px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;}
+.ai-demo-video-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.ai-demo-video-tag{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;padding:4px 10px;border-radius:2px;background:rgba(200,169,110,0.15);color:var(--accent);border:1px solid rgba(200,169,110,0.25);}
+
+/* AI INTRO — リード文 */
+.ai-intro-lead{max-width:680px;margin:0 0 72px;}
+.ai-intro-lead p{font-size:16px;color:rgba(255,255,255,0.55);line-height:2;margin-bottom:0;}
+.ai-intro-lead strong{color:var(--white);font-weight:600;}
+
+/* AI INTRO — アナロジーカード（横長） */
+.ai-analogy{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.06);margin-bottom:64px;}
+.ai-analogy-card{background:rgba(255,255,255,0.025);padding:44px 40px;position:relative;overflow:hidden;transition:background 0.3s;}
+.ai-analogy-card:hover{background:rgba(255,255,255,0.05);}
+.ai-analogy-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.ai-analogy-num::after{content:'';flex:1;height:1px;background:rgba(200,169,110,0.2);}
+.ai-analogy-icon{font-size:32px;margin-bottom:20px;display:block;line-height:1;}
+.ai-analogy-q{font-family:'DM Serif Display',serif;font-size:clamp(17px,1.8vw,22px);color:var(--white);line-height:1.4;margin-bottom:14px;}
+.ai-analogy-body{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.85;}
+.ai-analogy-arrow{position:absolute;bottom:32px;right:32px;font-family:'Space Mono',monospace;font-size:10px;color:rgba(200,169,110,0.3);letter-spacing:0.08em;}
+
+/* AI INTRO — 3ステップ図解 */
+.ai-how{margin-bottom:64px;}
+.ai-how-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-bottom:28px;}
+.ai-how-steps{display:flex;align-items:stretch;gap:0;}
+.ai-how-step{flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:28px 24px;position:relative;transition:border-color 0.3s,background 0.3s;}
+.ai-how-step:hover{border-color:rgba(200,169,110,0.25);background:rgba(255,255,255,0.05);}
+.ai-how-step + .ai-how-step::before{content:'→';position:absolute;left:-18px;top:50%;transform:translateY(-50%);font-family:'Space Mono',monospace;font-size:12px;color:rgba(200,169,110,0.35);z-index:1;}
+.ai-how-step-num{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.12em;color:rgba(200,169,110,0.5);text-transform:uppercase;margin-bottom:12px;}
+.ai-how-step-label{font-size:14px;font-weight:600;color:var(--white);margin-bottom:8px;line-height:1.35;}
+.ai-how-step-desc{font-size:12px;color:rgba(255,255,255,0.38);line-height:1.75;}
+.ai-how-step-tag{display:inline-block;margin-top:14px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.08em;padding:3px 8px;border-radius:2px;background:rgba(200,169,110,0.1);color:var(--accent);border:1px solid rgba(200,169,110,0.15);}
+
+/* AI INTRO — 具体例タイル */
+.ai-examples-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-bottom:24px;}
+.ai-examples-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:64px;}
+.ai-ex-tile{position:relative;border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;aspect-ratio:3/4;cursor:default;transition:border-color 0.4s,transform 0.4s,box-shadow 0.4s;}
+.ai-ex-tile:hover{border-color:rgba(200,169,110,0.4);transform:translateY(-6px);box-shadow:0 24px 56px rgba(0,0,0,0.5);}
+
+/* 動画背景 */
+.ai-ex-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0.55;transition:opacity 0.5s;z-index:0;}
+.ai-ex-tile:hover .ai-ex-video{opacity:0.75;}
+
+/* グラデーションオーバーレイ — 下から上へ暗く */
+.ai-ex-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,10,24,0.95) 0%,rgba(6,10,24,0.55) 45%,rgba(6,10,24,0.15) 100%);z-index:1;transition:background 0.4s;}
+.ai-ex-tile:hover .ai-ex-overlay{background:linear-gradient(to top,rgba(6,10,24,0.92) 0%,rgba(6,10,24,0.45) 50%,rgba(6,10,24,0.08) 100%);}
+
+/* テキストエリア — 常に下部固定 */
+.ai-ex-body{position:absolute;bottom:0;left:0;right:0;padding:20px 18px 22px;z-index:2;}
+.ai-ex-tag{display:inline-block;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;padding:3px 8px;border-radius:2px;background:rgba(200,169,110,0.15);color:var(--accent);border:1px solid rgba(200,169,110,0.25);margin-bottom:10px;}
+.ai-ex-label{font-size:13px;font-weight:600;color:var(--white);margin-bottom:6px;line-height:1.4;}
+.ai-ex-desc{font-size:11px;color:rgba(255,255,255,0.42);line-height:1.75;}
+
+/* AI INTRO — 橋渡し文（次セクションへの導線） */
+.ai-bridge{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:40px 48px;display:flex;align-items:center;justify-content:space-between;gap:32px;}
+.ai-bridge-text{flex:1;}
+.ai-bridge-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:rgba(200,169,110,0.6);text-transform:uppercase;margin-bottom:12px;}
+.ai-bridge-q{font-family:'DM Serif Display',serif;font-size:clamp(19px,2.2vw,28px);color:var(--white);line-height:1.35;}
+.ai-bridge-q em{font-style:italic;color:var(--accent);}
+.ai-bridge-arrow{font-size:28px;color:rgba(200,169,110,0.35);flex-shrink:0;font-family:'Space Mono',monospace;}
+
+@media(max-width:900px){
+  .ai-analogy{grid-template-columns:1fr;}
+  .ai-how-steps{flex-direction:column;}
+  .ai-how-step + .ai-how-step::before{content:'↓';left:50%;top:-14px;transform:translateX(-50%);}
+  .ai-examples-grid{grid-template-columns:1fr 1fr;}
+  .ai-ex-tile{aspect-ratio:4/5;}
+  .ai-bridge{flex-direction:column;padding:28px 24px;}
+}
+@media(max-width:540px){
+  .ai-examples-grid{grid-template-columns:1fr 1fr;}
+  .ai-ex-tile{aspect-ratio:3/4;}
+}
+
+/* PERCEPTION SECTION */
+.perception-section{background:var(--paper);color:var(--ink);}
+.perception-section .section-title{color:var(--navy);}
+.perception-section .section-eyebrow{color:var(--accent);}
+.perception-section .section-eyebrow::before{background:var(--accent);}
+.perception-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(0,0,0,0.08);margin-bottom:32px;}
+.p-card{background:var(--white);padding:40px 36px;}
+.p-card-dark{background:var(--navy);}
+.p-tag-old{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:20px;font-family:'Space Mono',monospace;background:var(--paper-mid);color:var(--ink-soft);}
+.p-tag-now{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:20px;font-family:'Space Mono',monospace;background:rgba(200,169,110,0.15);color:var(--accent);border:1px solid rgba(200,169,110,0.3);}
+.p-card-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);margin-bottom:12px;line-height:1.35;}
+.p-card-body{font-size:13px;color:var(--ink-soft);line-height:1.8;margin-bottom:16px;}
+.p-examples{display:flex;flex-direction:column;gap:8px;}
+.p-ex{font-size:12px;padding:8px 12px;border-radius:6px;background:var(--paper);color:var(--ink-mid);display:flex;align-items:center;gap:8px;line-height:1.5;}
+.p-ex::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.p-examples-dark .p-ex{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);}
+.p-quote{background:var(--navy);border-radius:12px;padding:44px 48px;margin-top:32px;}
+.p-quote-mark{font-family:'DM Serif Display',serif;font-size:72px;color:rgba(200,169,110,0.2);line-height:0.7;margin-bottom:16px;display:block;}
+.p-quote-text{font-family:'DM Serif Display',serif;font-size:clamp(18px,2.2vw,26px);color:var(--white);line-height:1.5;margin-bottom:16px;}
+.p-quote-sub{font-size:13px;color:rgba(255,255,255,0.4);line-height:1.8;}
+
+/* URGENCY SECTION */
+.urgency-section{background:var(--navy);color:var(--white);}
+.urgency-section .section-title{color:var(--white);}
+.urgency-section .section-eyebrow{color:var(--accent);}
+.urgency-section .section-eyebrow::before{background:var(--accent);}
+.urgency-section .section-sub{color:rgba(255,255,255,0.45);}
+.urgency-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.06);margin-top:56px;margin-bottom:56px;}
+.u-card{background:rgba(255,255,255,0.03);padding:36px 28px;transition:background 0.3s;}
+.u-card:hover{background:rgba(255,255,255,0.07);}
+.u-card-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase;margin-bottom:16px;}
+.u-card-title{font-family:'DM Serif Display',serif;font-size:18px;color:var(--white);margin-bottom:12px;line-height:1.35;}
+.u-card-body{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.8;}
+.u-reality{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding-top:56px;border-top:1px solid rgba(255,255,255,0.08);}
+.u-reality-tag{display:inline-block;font-size:10px;letter-spacing:0.12em;padding:5px 14px;border:1px solid rgba(200,169,110,0.3);color:var(--accent);text-transform:uppercase;border-radius:20px;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.u-reality-q{font-family:'DM Serif Display',serif;font-size:clamp(20px,2.2vw,30px);line-height:1.25;color:var(--white);margin-bottom:16px;}
+.u-reality-body{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.85;}
+.u-reality-right{display:flex;flex-direction:column;gap:14px;}
+.u-stat{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:28px 32px;display:flex;align-items:center;gap:28px;transition:background 0.3s,border-color 0.3s;}
+.u-stat:hover{background:rgba(255,255,255,0.07);border-color:rgba(200,169,110,0.25);}
+.u-stat-num{font-family:'DM Serif Display',serif;font-size:clamp(36px,3.5vw,52px);color:var(--accent);min-width:120px;flex-shrink:0;line-height:1;letter-spacing:-0.01em;}
+.u-stat-divider{width:1px;height:40px;background:rgba(255,255,255,0.08);flex-shrink:0;}
+.u-stat-desc{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;}
+.u-cta{display:flex;align-items:center;gap:24px;padding-top:56px;flex-wrap:wrap;}
+.u-cta-sub{font-size:13px;color:rgba(255,255,255,0.35);}
+
+@media(max-width:768px){
+  .perception-grid{grid-template-columns:1fr;}
+  .urgency-grid{grid-template-columns:1fr;}
+  .u-reality{grid-template-columns:1fr;gap:32px;}
+  .p-quote{padding:28px 24px;}
+}
+
+/* CHAT CONTACT */
+.chat-contact{max-width:640px;margin:48px auto 0;background:var(--white);border:1px solid rgba(0,0,0,0.07);border-radius:20px;overflow:hidden;}
+.chat-progress-bar{height:3px;background:var(--paper-mid);}
+.chat-progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.5s ease;}
+.chat-messages{display:flex;flex-direction:column;gap:14px;padding:28px 24px;min-height:360px;}
+.cbubble{max-width:85%;padding:13px 17px;border-radius:18px;font-size:14px;line-height:1.75;opacity:0;transform:translateY(10px);animation:cbpop 0.35s ease forwards;}
+@keyframes cbpop{to{opacity:1;transform:translateY(0);}}
+.cbubble.bot{background:var(--paper);color:var(--ink);border-bottom-left-radius:4px;align-self:flex-start;}
+.cbubble.hint{background:transparent;color:var(--ink-soft);font-size:12px;padding:2px 4px;align-self:flex-start;}
+.cbubble.user{background:var(--navy);color:#f0e8d6;border-bottom-right-radius:4px;align-self:flex-end;}
+.cchoices{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;align-self:flex-start;}
+.cchoice{padding:9px 16px;border:1px solid rgba(0,0,0,0.1);border-radius:20px;font-size:13px;background:var(--white);color:var(--ink);cursor:pointer;transition:all 0.2s;font-family:inherit;}
+.cchoice:hover,.cchoice.selected{background:var(--navy);color:#f0e8d6;border-color:var(--navy);}
+.cinput-row{display:flex;gap:8px;margin-top:4px;align-self:stretch;}
+.cinput-row input{flex:1;padding:11px 16px;border:1px solid rgba(0,0,0,0.1);border-radius:20px;font-size:14px;background:var(--white);color:var(--ink);outline:none;font-family:inherit;}
+.cinput-row input:focus{border-color:var(--accent);}
+.cinput-row button{padding:11px 20px;background:var(--accent);color:var(--navy);border:none;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.ctextarea-wrap{display:flex;flex-direction:column;gap:8px;align-self:stretch;margin-top:4px;}
+.ctextarea-wrap textarea{width:100%;padding:12px 16px;border:1px solid rgba(0,0,0,0.1);border-radius:14px;font-size:14px;font-family:inherit;background:var(--white);color:var(--ink);outline:none;resize:none;line-height:1.7;min-height:96px;}
+.ctextarea-wrap textarea:focus{border-color:var(--accent);}
+.ctextarea-actions{display:flex;justify-content:flex-end;gap:8px;}
+.ctextarea-actions button{padding:10px 20px;background:var(--accent);color:var(--navy);border:none;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.ctextarea-actions .cskip{background:transparent;color:var(--ink-soft);border:1px solid rgba(0,0,0,0.1);}
+.csummary{background:var(--paper);border:1px solid rgba(0,0,0,0.07);border-radius:14px;padding:20px 22px;margin-top:4px;align-self:stretch;}
+.csummary-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.06);font-size:13px;gap:12px;}
+.csummary-row:last-child{border-bottom:none;}
+.csummary-label{color:var(--ink-soft);white-space:nowrap;}
+.csummary-value{color:var(--ink);font-weight:600;text-align:right;}
+.cfinal-btn{width:100%;margin-top:14px;padding:15px;background:var(--navy);color:var(--white);border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity 0.2s;font-family:inherit;}
+.cfinal-btn:hover{opacity:0.85;}
+.crestart-btn{width:100%;margin-top:8px;padding:11px;background:transparent;color:var(--ink-soft);border:1px solid rgba(0,0,0,0.1);border-radius:10px;font-size:13px;cursor:pointer;font-family:inherit;}
+.ctyping{display:flex;gap:5px;align-items:center;padding:13px 17px;background:var(--paper);border-radius:18px;border-bottom-left-radius:4px;align-self:flex-start;width:54px;}
+.cdot{width:7px;height:7px;border-radius:50%;background:var(--ink-soft);animation:cblink 1.2s infinite;}
+.cdot:nth-child(2){animation-delay:0.2s;}.cdot:nth-child(3){animation-delay:0.4s;}
+@keyframes cblink{0%,80%,100%{opacity:0.2;}40%{opacity:1;}}
+
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#top" class="nav-brand" style="text-decoration:none;">
+    <span class="nav-brand-main">ClipDock</span>
+    <span class="nav-brand-sub">by BLITAST</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#workflow">ご利用の流れ</a></li>
+    <li><a href="#pricing">料金プラン</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" class="nav-cta">まず相談する</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-noise"></div>
+  <div class="particles" id="particles"></div>
+  <!-- ヒーロー背景動画 -->
+  <video autoplay muted loop playsinline
+    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.22;z-index:0;"
+    src="hero-bg.mp4"></video>
+  <!-- フィルターオーバーレイ -->
+  <div style="position:absolute;inset:0;z-index:5;background:linear-gradient(135deg,rgba(6,10,24,0.80) 0%,rgba(13,26,48,0.70) 50%,rgba(8,15,32,0.84) 100%);pointer-events:none;"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Short Clip Supply Service</div>
+    <h1 class="hero-title">
+      撮影なしで、<br>
+      使いやすい短尺動画を<br>
+      <em>毎月、整理して納品。</em>
+    </h1>
+    <p class="hero-sub">
+      投稿用、広告用、求人用に使いやすい6〜8秒の縦型クリップを、<br>
+      用途別に整理して毎月お渡しします。
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-accent">まず相談する（無料）</a>
+      <a href="#workflow" class="btn-ghost-white">サービスの流れを見る →</a>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- CLIPS STRIP -->
+<div class="clips-strip">
+  <div class="clips-track" id="clipsTrack"></div>
+</div>
+
+<!-- MARQUEE TEXT -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- USECASES -->
+<section class="usecases-section" id="usecases">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Use Cases</div>
+    <h2 class="section-title reveal reveal-delay-1">こんな用途に使えます</h2>
+    <p class="section-sub reveal reveal-delay-2">「動画が必要なのはわかっている。でも毎回作る余裕がない」という事業者のために設計されたサービスです。</p>
+    <div class="usecases-grid">
+      <div class="usecase-item reveal reveal-delay-1"><div class="usecase-num">01</div><div class="usecase-title">SNS投稿素材</div><p class="usecase-desc">Instagramリール・TikTok・YouTube Shortsなど、毎月の投稿に使えるクリップをまとめて供給します。</p></div>
+      <div class="usecase-item reveal reveal-delay-2"><div class="usecase-num">02</div><div class="usecase-title">広告テスト用クリエイティブ</div><p class="usecase-desc">Meta広告やショート広告に使える素材を複数パターン納品。訴求のA/Bテストがしやすくなります。</p></div>
+      <div class="usecase-item reveal reveal-delay-3"><div class="usecase-num">03</div><div class="usecase-title">採用・求人訴求</div><p class="usecase-desc">職場の雰囲気や働く姿を短尺で表現。求人媒体やSNSでの採用発信に活用できます。</p></div>
+      <div class="usecase-item reveal reveal-delay-1"><div class="usecase-num">04</div><div class="usecase-title">LP・Webサイト素材</div><p class="usecase-desc">サービス紹介や商品の印象づくりに使える短尺動画素材を、Webで使いやすい形で納品します。</p></div>
+      <div class="usecase-item reveal reveal-delay-2"><div class="usecase-num">05</div><div class="usecase-title">商品・サービスの印象づくり</div><p class="usecase-desc">商品写真やロゴ・訴求テキストをもとに、ブランドの世界観を短尺で表現したクリップを制作します。</p></div>
+      <div class="usecase-item reveal reveal-delay-3"><div class="usecase-num">06</div><div class="usecase-title">店頭・営業補助素材</div><p class="usecase-desc">店頭モニターや営業時のタブレット提示に使えるクリップとして活用いただけます。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MONITOR BAND -->
+<div class="monitor-band">
+  <div class="section-eyebrow reveal" style="justify-content:center;">🎉 Early Adopter</div>
+  <h2 class="monitor-title reveal">今だけ、モニター価格で<br>受け付けています。</h2>
+  <p class="monitor-desc reveal">サービス立ち上げにあたり、初期モニターとして参加いただける事業者様を募集中です。通常料金より特別な条件でご提供します。</p>
+  <a href="#contact" class="btn-navy reveal">モニターとして相談する</a>
+</div>
+
+<!-- WORKFLOW -->
+<section class="workflow-section" id="workflow">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Workflow</div>
+    <h2 class="section-title reveal reveal-delay-1">毎月、こう進みます</h2>
+    <p class="section-sub reveal reveal-delay-2">5ステップで完結する、シンプルな月次フロー。</p>
+    <div class="workflow-layout">
+      <nav class="workflow-nav" id="workflowNav">
+        <div class="workflow-nav-item active" data-step="0"><div class="workflow-nav-dot"></div><div class="workflow-nav-text"><span class="workflow-nav-num">01</span><span class="workflow-nav-label">素材を送る</span></div></div>
+        <div class="workflow-nav-item" data-step="1"><div class="workflow-nav-dot"></div><div class="workflow-nav-text"><span class="workflow-nav-num">02</span><span class="workflow-nav-label">方向性を整理</span></div></div>
+        <div class="workflow-nav-item" data-step="2"><div class="workflow-nav-dot"></div><div class="workflow-nav-text"><span class="workflow-nav-num">03</span><span class="workflow-nav-label">クリップ制作</span></div></div>
+        <div class="workflow-nav-item" data-step="3"><div class="workflow-nav-dot"></div><div class="workflow-nav-text"><span class="workflow-nav-num">04</span><span class="workflow-nav-label">用途別に納品</span></div></div>
+        <div class="workflow-nav-item" data-step="4"><div class="workflow-nav-dot"></div><div class="workflow-nav-text"><span class="workflow-nav-num">05</span><span class="workflow-nav-label">反応を次月へ</span></div></div>
+      </nav>
+      <div class="workflow-steps" id="workflowSteps">
+        <div class="workflow-step active" data-step="0"><div class="step-header"><div class="step-num">01</div><div><div class="step-phase">Input</div><h3 class="step-title">写真と、伝えたいことを送る</h3></div></div><div class="step-tiles"><div class="step-tile"><div class="step-tile-label">この段階でやること</div><div class="step-tile-content">商品写真・ロゴ・URL・今月押したいポイントを共有する</div></div><div class="step-tile"><div class="step-tile-label">この段階で整うこと</div><div class="step-tile-content">制作に必要な素材と訴求の方向性が揃う</div></div><div class="step-tile"><div class="step-tile-label">月次運用での意味</div><div class="step-tile-content">撮影なしで始められる。毎月この工程から再スタート</div></div></div></div>
+        <div class="workflow-step" data-step="1"><div class="step-header"><div class="step-num">02</div><div><div class="step-phase">Strategy</div><h3 class="step-title">今月の方向性を整理する</h3></div></div><div class="step-tiles"><div class="step-tile"><div class="step-tile-label">この段階でやること</div><div class="step-tile-content">高級感・季節感・採用訴求など、今月強く出したい切り口を3つ程度に絞る</div></div><div class="step-tile"><div class="step-tile-label">この段階で整うこと</div><div class="step-tile-content">量産しやすい方向性が決まり、ブレない制作が可能になる</div></div><div class="step-tile"><div class="step-tile-label">月次運用での意味</div><div class="step-tile-content">毎月の訴求軸が積み上がり、ブランドの一貫性が生まれる</div></div></div></div>
+        <div class="workflow-step" data-step="2"><div class="step-header"><div class="step-num">03</div><div><div class="step-phase">Production</div><h3 class="step-title">短尺クリップをまとめて制作・選定する</h3></div></div><div class="step-tiles"><div class="step-tile"><div class="step-tile-label">この段階でやること</div><div class="step-tile-content">6〜8秒の縦型クリップを複数制作。破綻のないものを選定</div></div><div class="step-tile"><div class="step-tile-label">この段階で整うこと</div><div class="step-tile-content">使えるクリップが選び抜かれ、納品候補として整う</div></div><div class="step-tile"><div class="step-tile-label">月次運用での意味</div><div class="step-tile-content">量産前提の型があるから、毎月安定したクオリティを維持できる</div></div></div></div>
+        <div class="workflow-step" data-step="3"><div class="step-header"><div class="step-num">04</div><div><div class="step-phase">Delivery</div><h3 class="step-title">用途ごとに整理して納品する</h3></div></div><div class="step-tiles"><div class="step-tile"><div class="step-tile-label">この段階でやること</div><div class="step-tile-content">投稿用・広告用・求人用など、使いどころが分かる形で整理して納品</div></div><div class="step-tile"><div class="step-tile-label">この段階で整うこと</div><div class="step-tile-content">ファイル名やラベルで迷いにくく、すぐ使える状態になる</div></div><div class="step-tile"><div class="step-tile-label">月次運用での意味</div><div class="step-tile-content">納品後に「どれをどこで使うか」で迷わない。運用がスムーズになる</div></div></div></div>
+        <div class="workflow-step" data-step="4"><div class="step-header"><div class="step-num">05</div><div><div class="step-phase">Improvement</div><h3 class="step-title">使って、反応を見て、次月に活かす</h3></div></div><div class="step-tiles"><div class="step-tile"><div class="step-tile-label">この段階でやること</div><div class="step-tile-content">反応の良かった訴求や方向性を次回に反映。改善メモを共有</div></div><div class="step-tile"><div class="step-tile-label">この段階で整うこと</div><div class="step-tile-content">毎月少しずつ勝ち筋に寄せた設計ができるようになる</div></div><div class="step-tile"><div class="step-tile-label">月次運用での意味</div><div class="step-tile-content">継続することで、事業に合った動画の型が蓄積されていく</div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why-section" id="why">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Why ClipDock</div>
+    <h2 class="section-title reveal reveal-delay-1">選ばれる理由</h2>
+    <p class="section-sub reveal reveal-delay-2">ClipDockが選ばれ続ける、7つの設計思想。</p>
+
+    <div class="why-carousel reveal">
+      <div class="why-track-wrap">
+        <div class="why-track" id="whyTrack">
+          <div class="why-card" data-i="0">
+            <div class="why-card-num">01 —</div>
+            <div class="why-card-icon">📦</div>
+            <div class="why-card-title">撮影なしで始められる</div>
+            <p class="why-card-desc">商品写真やロゴ、URLがあれば制作を開始できます。カメラも機材も撮影場所も一切不要です。</p>
+            <span class="why-card-tag">No Shooting</span>
+          </div>
+          <div class="why-card" data-i="1">
+            <div class="why-card-num">02 —</div>
+            <div class="why-card-icon">🔄</div>
+            <div class="why-card-title">毎月の運用を前提にした設計</div>
+            <p class="why-card-desc">単発の作品ではなく、継続して使える素材を毎月定量で供給することを主目的に設計されています。</p>
+            <span class="why-card-tag">Monthly Supply</span>
+          </div>
+          <div class="why-card" data-i="2">
+            <div class="why-card-num">03 —</div>
+            <div class="why-card-icon">✂️</div>
+            <div class="why-card-title">短尺に絞っているから使いやすい</div>
+            <p class="why-card-desc">6〜8秒・9:16固定という制約が、迷いのない運用を生みます。届いたその日から使える状態で納品します。</p>
+            <span class="why-card-tag">6–8s · 9:16</span>
+          </div>
+          <div class="why-card" data-i="3">
+            <div class="why-card-num">04 —</div>
+            <div class="why-card-icon">🎯</div>
+            <div class="why-card-title">訴求の切り口も整理する</div>
+            <p class="why-card-desc">動画を作るだけでなく、今月何を伝えるかの訴求設計も一緒に行います。素材と戦略がセットで届きます。</p>
+            <span class="why-card-tag">Strategy Included</span>
+          </div>
+          <div class="why-card" data-i="4">
+            <div class="why-card-num">05 —</div>
+            <div class="why-card-icon">📁</div>
+            <div class="why-card-title">納品後も扱いやすい</div>
+            <p class="why-card-desc">投稿用・広告用・求人用など用途別に整理されたファイルで納品。どれをどこで使うか迷いません。</p>
+            <span class="why-card-tag">Organized Delivery</span>
+          </div>
+          <div class="why-card" data-i="5">
+            <div class="why-card-num">06 —</div>
+            <div class="why-card-icon">⬆️</div>
+            <div class="why-card-title">必要に応じて特注にも広げられる</div>
+            <p class="why-card-desc">信頼関係ができた段階で、完成CMや長尺編集にも対応。工場からアトリエへ、段階的に広げられます。</p>
+            <span class="why-card-tag">Custom Available</span>
+          </div>
+          <div class="why-card why-card-featured" data-i="6">
+            <div class="why-card-num">07 —</div>
+            <div class="why-card-icon">🎬</div>
+            <div class="why-card-title">業務用の高精度モデルで制作</div>
+            <p class="why-card-desc">最新の高精度AI動画生成モデルを使用。「なんとなく動く映像」ではなく、実際に使えるクオリティを基準に届けます。</p>
+            <span class="why-card-tag">High Precision</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="why-controls">
+        <button class="why-btn" id="whyPrev" onclick="whyMove(-1)">←</button>
+        <button class="why-btn" id="whyNext" onclick="whyMove(1)">→</button>
+        <div class="why-dots" id="whyDots"></div>
+        <div class="why-progress"><div class="why-progress-fill" id="whyProg"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Pricing</div>
+    <h2 class="section-title reveal reveal-delay-1">料金プラン</h2>
+    <p class="section-sub reveal reveal-delay-2">すべてのプランで撮影不要・用途別整理納品・月次対応が含まれます。セットアップ費用はありません。</p>
+    <div class="pricing-grid">
+      <div class="pricing-card reveal reveal-delay-1"><div class="pricing-plan">Starter</div><div class="pricing-price">¥9,800</div><div class="pricing-period">/ 月（税別）</div><div class="pricing-divider"></div><ul class="pricing-features"><li>短尺クリップ 5本</li><li>訴求軸 1つまで</li><li>軽微修正 各1回</li><li>9:16縦型・6〜8秒固定</li><li>用途別整理納品</li></ul><a href="#contact" class="pricing-btn">まず試してみる</a></div>
+      <div class="pricing-card featured reveal reveal-delay-2"><div class="pricing-badge">Most Popular</div><div class="pricing-plan">Standard</div><div class="pricing-price">¥29,800</div><div class="pricing-period">/ 月（税別）</div><div class="pricing-divider"></div><ul class="pricing-features"><li>短尺クリップ 20本</li><li>訴求軸 3つまで</li><li>軽微修正 各1回</li><li>月次振り返りメモ付き</li><li>用途別整理納品</li></ul><a href="#contact" class="pricing-btn">相談する</a></div>
+      <div class="pricing-card reveal reveal-delay-3"><div class="pricing-plan">Growth</div><div class="pricing-price">¥59,800</div><div class="pricing-period">/ 月（税別）</div><div class="pricing-divider"></div><ul class="pricing-features"><li>短尺クリップ 40本</li><li>訴求軸 4つまで</li><li>軽微修正 各1回</li><li>月次改善メモ付き</li><li>用途別整理納品</li></ul><a href="#contact" class="pricing-btn">相談する</a></div>
+      <div class="pricing-card custom reveal reveal-delay-4"><div class="pricing-plan">Custom</div><div class="pricing-price" style="font-size:22px;padding-top:10px;">別途見積り</div><div class="pricing-period">/ プロジェクト</div><div class="pricing-divider"></div><ul class="pricing-features"><li>完成CM・プロモーション映像</li><li>長尺編集・構成演出込み</li><li>特注制作全般</li><li>納期・仕様はご相談</li></ul><a href="#contact" class="pricing-btn">お問い合わせ</a></div>
+    </div>
+    <div class="pricing-note reveal">※ テロップ・BGMは基本含まれません。オプションにて対応可能です。<br>※ 追加クリップ・再編集・サムネイル制作などのオプションも対応しています。</div>
+  </div>
+</section>
+
+<!-- FIRST MONTH SECTION -->
+<section class="firstmonth-section">
+  <div class="firstmonth-inner">
+    <div class="firstmonth-layout">
+
+      <!-- 左：メッセージ -->
+      <div class="firstmonth-left">
+        <div class="firstmonth-eyebrow reveal">Just One Month</div>
+        <h2 class="firstmonth-title reveal reveal-delay-1">まず、<em>1ヶ月だけ</em><br>試してみてください。</h2>
+        <p class="firstmonth-body reveal reveal-delay-2">
+          ClipDockは継続することで真価を発揮するサービスですが、<strong>最初の1ヶ月だけでも、手元の動画素材は確実に増えます。</strong><br><br>
+          「SNSに投稿できるものがない」「広告に使える映像が足りない」<br>
+          その状態が、1ヶ月で変わります。<br><br>
+          まずは試してみて、手元に届いたクリップを使ってみてください。<br>それだけで、動画運用の感覚が変わるはずです。
+        </p>
+        <div class="firstmonth-actions reveal reveal-delay-3">
+          <a href="#contact" class="btn-accent">まず1ヶ月、相談する</a>
+        </div>
+        <p class="firstmonth-note reveal reveal-delay-4">相談・見積もりは無料です。<br>「まず試してみたい」だけでも、ぜひ話しかけてください。</p>
+      </div>
+
+      <!-- 右：1ヶ月の体験イメージ -->
+      <div class="firstmonth-card reveal reveal-delay-2">
+        <div class="firstmonth-card-label">1ヶ月で起きること — イメージ</div>
+        <div class="firstmonth-steps">
+          <div class="firstmonth-step">
+            <div class="firstmonth-step-num">1</div>
+            <div class="firstmonth-step-body">
+              <div class="firstmonth-step-title">写真と訴求を共有するだけで始まる</div>
+              <div class="firstmonth-step-desc">撮影不要。手元にある素材を送るだけでOKです。</div>
+            </div>
+          </div>
+          <div class="firstmonth-step">
+            <div class="firstmonth-step-num">2</div>
+            <div class="firstmonth-step-body">
+              <div class="firstmonth-step-title">今月の訴求軸を一緒に整理する</div>
+              <div class="firstmonth-step-desc">何を伝えるか迷わなくていい。方向性の設計からお手伝いします。</div>
+            </div>
+          </div>
+          <div class="firstmonth-step">
+            <div class="firstmonth-step-num">3</div>
+            <div class="firstmonth-step-body">
+              <div class="firstmonth-step-title">クリップがまとまって届く</div>
+              <div class="firstmonth-step-desc">投稿用・広告用・求人用に整理された状態で納品されます。</div>
+            </div>
+          </div>
+          <div class="firstmonth-step">
+            <div class="firstmonth-step-num">4</div>
+            <div class="firstmonth-step-body">
+              <div class="firstmonth-step-title">実際に使ってみる</div>
+              <div class="firstmonth-step-desc">SNSに投稿する、広告に使う。反応を見て、続けるか判断する。</div>
+            </div>
+          </div>
+        </div>
+        <div class="firstmonth-card-footer">
+          <div class="firstmonth-card-result">動画素材が、手元に存在する状態になる</div>
+          <span class="firstmonth-card-tag">Month 01</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<!-- STRATEGY BAND -->
+<div class="strategy-band">
+  <div class="strategy-band-inner">
+    <div class="strategy-band-left reveal">
+      <div class="strategy-band-tag">After Delivery</div>
+      <h3 class="strategy-band-title">届いたクリップを<br><em>どう使えばいいか</em>、迷ったら。</h3>
+      <p class="strategy-band-desc">
+        クリップが毎月届くのはわかった。でも<strong>「それをどのタイミングで投稿すればいいか」「広告にはどう使うか」「どんな文章を添えるか」</strong>——そこで止まってしまう方も多いはずです。<br><br>
+        納品後の使い方や発信の組み立て方についても、<strong>別途ご相談いただけます。</strong><br>
+        クリップを渡して終わり、ではなく、使える状態になるまでお付き合いします。
+      </p>
+    </div>
+    <div class="strategy-band-right reveal reveal-delay-2">
+      <div class="strategy-band-cta">
+        <a href="#contact" class="btn-navy">運用の相談をしてみる</a>
+        <p class="strategy-band-note">「届いたけど使い方がわからない」<br>そのご相談も、別途お受けしています。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI INTRO SECTION -->
+<section class="ai-intro-section" id="ai-intro">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">What is AI Video</div>
+    <h2 class="section-title reveal reveal-delay-1">そもそも、<br>動画生成AIとは何か。</h2>
+    <p class="section-sub reveal reveal-delay-2" style="max-width:600px;">難しく考えなくて大丈夫です。<br>「なんとなく聞いたことはあるけど、よく知らない」という方のために、まず基本を整理します。</p>
+
+    <div class="ai-intro-lead reveal reveal-delay-3">
+      <p>動画生成AIとは、<strong>「テキストや画像を入力するだけで、動画を自動で生成するAI技術」</strong>のことです。<br>カメラも、照明も、モデルも、撮影場所も一切必要ありません。<br>言葉や画像を与えると、AIがゼロから映像を「描き出す」ように動画を作ります。</p>
+    </div>
+
+    <!-- デモ映像 -->
+    <div class="ai-demo-video-wrap reveal">
+      <video autoplay muted loop playsinline src="ai-intro-demo.mp4"></video>
+      <div class="ai-demo-video-overlay"></div>
+      <div class="ai-demo-video-caption">
+        <span class="ai-demo-video-label">テキストを打ち込むだけで、映像が生まれる</span>
+        <span class="ai-demo-video-tag">AI Generation · Demo</span>
+      </div>
+    </div>
+
+    <!-- アナロジーカード -->
+    <div class="ai-analogy reveal">
+      <div class="ai-analogy-card">
+        <div class="ai-analogy-num">たとえるなら 01</div>
+        <span class="ai-analogy-icon">🖼️</span>
+        <h3 class="ai-analogy-q">「文字を打つと絵が生まれる」<br>画像生成AIの、動画版です</h3>
+        <p class="ai-analogy-body">「夕暮れのカフェ、窓際の席、コーヒーの湯気」と入力すると、その通りの画像が生成される技術を聞いたことがある方も多いはず。動画生成AIは、それが「動く映像」になったものです。</p>
+        <span class="ai-analogy-arrow">→ 画像が動くイメージ</span>
+      </div>
+      <div class="ai-analogy-card">
+        <div class="ai-analogy-num">たとえるなら 02</div>
+        <span class="ai-analogy-icon">🎬</span>
+        <h3 class="ai-analogy-q">「監督とカメラクルーなしで<br>撮影ができる」感覚に近い</h3>
+        <p class="ai-analogy-body">ロケ地を押さえ、スタッフを集め、機材を準備して行う「撮影」。AIはその一連のプロセスを、指示文ひとつで再現しようとします。実際の撮影のような映像が、PCの中で完結します。</p>
+        <span class="ai-analogy-arrow">→ 撮影のデジタル代替</span>
+      </div>
+    </div>
+
+    <!-- 3ステップ図解 -->
+    <div class="ai-how reveal">
+      <div class="ai-how-title">どうやって動画ができるのか — 仕組みのイメージ</div>
+      <div class="ai-how-steps">
+        <div class="ai-how-step">
+          <div class="ai-how-step-num">Step 01</div>
+          <div class="ai-how-step-label">指示を与える</div>
+          <div class="ai-how-step-desc">「どんな映像にしたいか」をテキストや画像で伝えます。「商品のクローズアップ・ゆっくりと回転・高級感のある照明」など、細かく指示するほど精度が上がります。</div>
+          <span class="ai-how-step-tag">Text / Image Input</span>
+        </div>
+        <div class="ai-how-step">
+          <div class="ai-how-step-num">Step 02</div>
+          <div class="ai-how-step-label">AIが映像を生成する</div>
+          <div class="ai-how-step-desc">学習した膨大な映像データをもとに、AIがフレームを1枚ずつ「描き起こす」ように映像を作ります。光の当たり方・動きの物理法則・素材感まで再現します。</div>
+          <span class="ai-how-step-tag">AI Generation</span>
+        </div>
+        <div class="ai-how-step">
+          <div class="ai-how-step-num">Step 03</div>
+          <div class="ai-how-step-label">動画ファイルとして出力</div>
+          <div class="ai-how-step-desc">数十秒〜数分で、SNSや広告に使える動画ファイルが完成します。そのまま投稿・配信できる状態で届きます。</div>
+          <span class="ai-how-step-tag">Video File Output</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 具体例タイル -->
+    <div class="ai-examples-title reveal">どんな映像が作れるのか — 具体例</div>
+    <div class="ai-examples-grid reveal">
+      <div class="ai-ex-tile">
+        <video class="ai-ex-video" autoplay muted loop playsinline src="sample-cafe.mp4"></video>
+        <div class="ai-ex-overlay"></div>
+        <div class="ai-ex-body">
+          <span class="ai-ex-tag">投稿用 · 飲食</span>
+          <div class="ai-ex-label">カフェ・飲食の雰囲気映像</div>
+          <div class="ai-ex-desc">湯気の立つコーヒー、食材のクローズアップ、店内の柔らかい光。実際の店舗がなくても制作できます。</div>
+        </div>
+      </div>
+      <div class="ai-ex-tile">
+        <video class="ai-ex-video" autoplay muted loop playsinline src="sample-product.mp4"></video>
+        <div class="ai-ex-overlay"></div>
+        <div class="ai-ex-body">
+          <span class="ai-ex-tag">広告用 · 商品</span>
+          <div class="ai-ex-label">商品・パッケージのビジュアル</div>
+          <div class="ai-ex-desc">化粧品、食品、アパレル。商品写真をもとに、ゆっくり回転する・光が当たる、そんな動きを加えられます。</div>
+        </div>
+      </div>
+      <div class="ai-ex-tile">
+        <video class="ai-ex-video" autoplay muted loop playsinline src="sample-office.mp4"></video>
+        <div class="ai-ex-overlay"></div>
+        <div class="ai-ex-body">
+          <span class="ai-ex-tag">求人用 · 採用</span>
+          <div class="ai-ex-label">職場・採用イメージ映像</div>
+          <div class="ai-ex-desc">モダンなオフィス、スタッフが働く雰囲気、チームの一体感。求人訴求に使いやすいシーンを作れます。</div>
+        </div>
+      </div>
+      <div class="ai-ex-tile">
+        <video class="ai-ex-video" autoplay muted loop playsinline src="sample-brand.mp4"></video>
+        <div class="ai-ex-overlay"></div>
+        <div class="ai-ex-body">
+          <span class="ai-ex-tag">LP用 · ブランド</span>
+          <div class="ai-ex-label">ブランドの世界観・抽象映像</div>
+          <div class="ai-ex-desc">光の粒子、波紋、幾何学的な動き。言葉にしにくいブランドの"空気感"を映像で表現できます。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 橋渡し文 -->
+    <div class="ai-bridge reveal">
+      <div class="ai-bridge-text">
+        <div class="ai-bridge-label">ここで、ひとつ確認したいことがあります</div>
+        <div class="ai-bridge-q">「動画生成AIって、<em>まだ使えないレベル</em>でしょ」<br>そのイメージ、いつ頃のものですか？</div>
+      </div>
+      <div class="ai-bridge-arrow">↓</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PERCEPTION SECTION -->
+<section class="perception-section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Perception Gap</div>
+    <h2 class="section-title reveal reveal-delay-1" style="color:var(--navy);">生成AI動画を、<br><em style="font-style:italic;color:var(--accent);">舐めていませんか？</em></h2>
+    <p class="section-sub reveal reveal-delay-2" style="color:var(--ink-soft);margin-bottom:56px;">「AIが作った動画でしょ」という先入観、それは数年前のイメージです。<br>いまの生成AI動画は、見ても分からないレベルに達しています。</p>
+    <div class="perception-grid reveal">
+      <div class="p-card">
+        <span class="p-tag-old">古いイメージ</span>
+        <h3 class="p-card-title">AIの動画は<br>すぐバレる、使えない</h3>
+        <p class="p-card-body">確かに初期の生成AI動画は、動きが不自然でAI感が滲み出ていました。そのイメージが残っている方も多いはずです。</p>
+        <div class="p-examples">
+          <div class="p-ex">指の本数がおかしい</div>
+          <div class="p-ex">動きがカクカクしている</div>
+          <div class="p-ex">背景が溶けている</div>
+          <div class="p-ex">「なんか変」と感じさせる</div>
+        </div>
+      </div>
+      <div class="p-card p-card-dark">
+        <span class="p-tag-now">2026年の現実</span>
+        <h3 class="p-card-title" style="color:var(--white);">見分けがつかない<br>レベルに達している</h3>
+        <p class="p-card-body" style="color:rgba(255,255,255,0.5);">最新の生成AIモデルは、物理法則・光・人物の動きを驚異的な精度で再現します。実際に大手企業のCMやWeb広告にも、静かに使われ始めています。</p>
+        <div class="p-examples p-examples-dark">
+          <div class="p-ex">大手ブランドのSNS広告に活用</div>
+          <div class="p-ex">テレビCMへの導入事例も登場</div>
+          <div class="p-ex">撮影とAIの区別がつかない品質</div>
+          <div class="p-ex">1本あたりのコストは激安</div>
+        </div>
+      </div>
+    </div>
+    <div class="p-quote reveal">
+      <div class="p-quote-mark">"</div>
+      <p class="p-quote-text">個人や中小事業者こそ、<em style="font-style:italic;color:var(--accent);">いま動くべきタイミング</em>です。<br>大手が予算をかけて整えてきた映像表現が、月数万円で手に入る。<br>こんな時代、かつてありませんでした。</p>
+      <p class="p-quote-sub">ClipDockは、その最前線の技術を使って毎月クリップを届けるサービスです。認識が変わったなら、あとは動くだけです。</p>
+    </div>
+  </div>
+</section>
+
+<!-- URGENCY SECTION -->
+<section class="urgency-section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Now or Never</div>
+    <h2 class="section-title reveal reveal-delay-1">あなたのライバルは、<br><em style="font-style:italic;color:var(--accent);">すでに動画を量産している。</em></h2>
+    <p class="section-sub reveal reveal-delay-2">SNS、広告、採用。あらゆる接点で「動画があるか、ないか」が差を生む時代になりました。生成AIの登場で、その格差はさらに加速しています。</p>
+    <div class="urgency-grid reveal">
+      <div class="u-card">
+        <div class="u-card-label">現実 01</div>
+        <div class="u-card-title">撮影コストゼロで<br>競合が動き出している</div>
+        <p class="u-card-body">カメラも、スタジオも、モデルも不要。生成AIを使えば、アイデアと訴求さえあれば動画は作れる時代です。対応が遅れるほど、差は広がります。</p>
+      </div>
+      <div class="u-card">
+        <div class="u-card-label">現実 02</div>
+        <div class="u-card-title">動画がない投稿は<br>埋もれていく</div>
+        <p class="u-card-body">SNSのアルゴリズムは動画を優遇します。写真だけで戦うのは、すでに不利な土俵に立つことを意味します。特に個人・小規模事業者ほど影響が大きい。</p>
+      </div>
+      <div class="u-card">
+        <div class="u-card-label">現実 03</div>
+        <div class="u-card-title">でも、毎月作り続けるのは<br>一人では限界がある</div>
+        <p class="u-card-body">だからこそ、仕組みが必要です。ClipDockは「毎月動画が届く状態」を作ることで、あなたが本業に集中できる体制を整えます。</p>
+      </div>
+    </div>
+    <div class="u-reality reveal">
+      <div class="u-reality-left">
+        <div class="u-reality-tag">小規模事業者こそ、今すぐ</div>
+        <h3 class="u-reality-q">大手と戦う唯一の武器が、<br>コンテンツの量と質です。</h3>
+        <p class="u-reality-body">予算も人員も少ない個人・中小事業者が大手に勝てる場所があるとすれば、それはSNSと動画広告のクリエイティブ戦略です。生成AIはその格差を埋める、今この瞬間の最短ルートです。</p>
+      </div>
+      <div class="u-reality-right">
+        <div class="u-stat">
+          <div class="u-stat-num">3×</div>
+          <div class="u-stat-divider"></div>
+          <div class="u-stat-desc">動画投稿はテキスト・画像投稿と比べて、SNSでのリーチが平均3倍以上になるとされています</div>
+        </div>
+        <div class="u-stat">
+          <div class="u-stat-num">月20本</div>
+          <div class="u-stat-divider"></div>
+          <div class="u-stat-desc">ClipDockのStandardプランで毎月届くクリップ数。週5本のペースで投稿を維持できます</div>
+        </div>
+        <div class="u-stat">
+          <div class="u-stat-num">¥29,800</div>
+          <div class="u-stat-divider"></div>
+          <div class="u-stat-desc">撮影・編集・ディレクション費用が月額に含まれます。外注1本分以下の金額で20本が届く</div>
+        </div>
+      </div>
+    </div>
+    <div class="u-cta reveal">
+      <a href="#contact" class="btn-accent">まず、相談してみる</a>
+      <span class="u-cta-sub">費用はかかりません。話を聞くだけでも歓迎です。</span>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">FAQ</div>
+    <h2 class="section-title reveal reveal-delay-1">よくある質問</h2>
+    <div class="faq-list">
+      <div class="faq-item reveal"><button class="faq-question"><span class="faq-q-text">どんな動画が納品されますか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">6〜8秒・9:16縦型の短尺クリップが中心です。完成したCMや長尺の編集動画ではなく、SNS投稿・広告テスト・求人訴求などに使いやすいクリップ素材をまとめてお届けします。</div></div></div>
+      <div class="faq-item reveal"><button class="faq-question"><span class="faq-q-text">撮影は本当に不要ですか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">はい、撮影なしで始められます。商品写真・サービス情報・ロゴ・URLなどをご共有いただければ制作が可能です。お手元に素材がない場合もまずご相談ください。</div></div></div>
+      <div class="faq-item reveal"><button class="faq-question"><span class="faq-q-text">テロップやBGMは入りますか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">基本プランにはテロップ・BGMは含まれません。オプションとして対応可能ですので、ご希望の場合はお問い合わせ時にご相談ください。</div></div></div>
+      <div class="faq-item reveal"><button class="faq-question"><span class="faq-q-text">修正はできますか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">各クリップにつき軽微な修正を1回承ります。大幅な変更や作り直しは別途ご相談となります。</div></div></div>
+      <div class="faq-item reveal"><button class="faq-question"><span class="faq-q-text">どんな業種に向いていますか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">飲食・美容・小売・サービス業・EC・採用強化中の企業など、幅広い業種に対応しています。SNS発信や広告運用に動画素材を必要とする事業者様であればご活用いただけます。</div></div></div>
+      <div class="faq-item reveal"><button class="faq-question"><span class="faq-q-text">1回だけでも依頼できますか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">基本は月次継続のサービスですが、まずはお試し感覚でご相談いただけます。モニター期間中は特別な条件でご提供していますのでお気軽にどうぞ。</div></div></div>
+      <div class="faq-item reveal"><button class="faq-question"><span class="faq-q-text">完成CMのような動画も依頼できますか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Customプランとして、完成CM・長尺編集・構成演出込みの特注制作にも対応しています。まずは通常プランでお付き合いいただいた後、ご相談ください。</div></div></div>
+      <div class="faq-item reveal"><button class="faq-question"><span class="faq-q-text">動画の知識がなくても大丈夫ですか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><div class="faq-answer-inner">はい、問題ありません。写真と伝えたいことをお伝えいただくだけで進められるよう設計しています。</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal" style="justify-content:center;">Contact</div>
+    <h2 class="section-title reveal reveal-delay-1" style="text-align:center;">まず、試してみてください</h2>
+    <p class="section-sub reveal reveal-delay-2" style="margin:0 auto;text-align:center;">発注のイメージを、会話しながら確認できます。費用は一切かかりません。</p>
+    <div class="chat-contact reveal reveal-delay-3">
+      <div class="chat-progress-bar"><div class="chat-progress-fill" id="chatProg" style="width:0%"></div></div>
+      <div class="chat-messages" id="chatMessages"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="final-cta-eyebrow reveal">ClipDock by BLITAST</div>
+  <h2 class="final-cta-title reveal reveal-delay-1">毎月使える動画が、<br><em style="font-style:italic;color:var(--accent);">仕組みとして届く。</em></h2>
+  <p class="final-cta-sub reveal reveal-delay-2">撮影なしで始められる、短尺動画の定期供給サービス。まずは一度、相談してみてください。</p>
+  <div class="final-cta-actions reveal reveal-delay-3">
+    <a href="#contact" class="btn-accent">無料で相談する</a>
+    <a href="#pricing" class="btn-outline-white">料金を確認する</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">ClipDock by BLITAST</div>
+  <div class="footer-note">© 2026 BLITAST. All rights reserved.</div>
+</footer>
+
+<script>
+// カーソルグロー
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+
+// NAVスクロール
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ヒーロータイトル — ページロード後すぐ発火
+window.addEventListener('DOMContentLoaded', () => {
+  const heroTitle = document.querySelector('.hero-title');
+  if (heroTitle && heroTitle.dataset.titleReady) {
+    heroTitle.querySelectorAll('.title-reveal-line').forEach((line, i) => {
+      line.style.animationDelay = (0.35 + i * 0.10) + 's';
+      line.classList.add('in');
+    });
+    heroTitle.dataset.titleFired = '1';
+  }
+});
+
+// パーティクル
+const pContainer = document.getElementById('particles');
+for (let i = 0; i < 20; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 3 + 1;
+  p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;animation-duration:${Math.random()*16+10}s;animation-delay:${Math.random()*12}s;`;
+  pContainer.appendChild(p);
+}
+
+// クリップマーキー
+const tags = ['投稿用','広告用','求人用','LP用','店頭用','SNS用'];
+const durs = ['6s','7s','8s'];
+const track = document.getElementById('clipsTrack');
+let ch = '';
+for (let i = 0; i < 26; i++) {
+  ch += `<div class="clip-thumb"><div class="clip-thumb-inner"><div class="clip-play-btn"></div><div><div class="clip-thumb-tag">${tags[i%tags.length]}</div><div class="clip-thumb-dur">${durs[i%durs.length]} · 9:16</div></div></div></div>`;
+}
+track.innerHTML = ch + ch;
+
+// マーキーテキスト
+const words = ['撮影不要','6〜8秒クリップ','月次納品','投稿用素材','広告テスト','求人訴求','9:16縦型','用途別整理','SNS動画供給','ClipDock by BLITAST'];
+const mt = document.getElementById('marqueeTrack');
+let mh = '';
+for (let i = 0; i < 4; i++) words.forEach(w => { mh += `<div class="marquee-item">${w}<span class="marquee-dot">◆</span></div>`; });
+mt.innerHTML = mh + mh;
+
+// スクロールリビール
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal,.reveal-left').forEach(el => ro.observe(el));
+
+// 見出し行単位リビール
+(function(){
+  // 対象: section-title, hero-title, final-cta-title, monitor-title
+  const titleSels = [
+    '.section-title',
+    '.hero-title',
+    '.final-cta-title',
+    '.monitor-title',
+    '.u-reality-q',
+    '.p-quote-text',
+  ];
+  const titles = document.querySelectorAll(titleSels.join(','));
+
+  titles.forEach(el => {
+    // すでにラップ済みならスキップ
+    if (el.dataset.titleWrapped) return;
+    el.dataset.titleWrapped = '1';
+
+    // innerHTML を行単位に分解（<br> で区切る）
+    // em など内部タグを保持するため、<br> をセパレーターとして使う
+    const raw = el.innerHTML;
+    const lines = raw.split(/<br\s*\/?>/i);
+
+    el.innerHTML = lines.map((line, i) =>
+      `<span class="title-reveal-wrap"><span class="title-reveal-line" data-line="${i}">${line}</span></span>`
+    ).join('');
+
+    // 元のreveal classを除去してネイティブ管理に切り替え
+    el.classList.remove('reveal','reveal-delay-1','reveal-delay-2','reveal-delay-3','reveal-delay-4');
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+    el.dataset.titleReady = '1';
+  });
+
+  // IntersectionObserver で発火
+  const BASE_DELAY   = 0.06;  // 行間のstagger秒
+  const ENTRY_DELAY  = 0.08;  // セクション進入後の初動ウェイト
+
+  const toRo = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      if (el.dataset.titleFired) return;
+      el.dataset.titleFired = '1';
+      toRo.unobserve(el);
+
+      el.querySelectorAll('.title-reveal-line').forEach((line, i) => {
+        const delay = ENTRY_DELAY + i * BASE_DELAY;
+        line.style.animationDelay = delay + 's';
+        line.classList.add('in');
+      });
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('[data-title-ready]').forEach(el => toRo.observe(el));
+})();
+
+// FAQアコーディオン
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const ans = item.querySelector('.faq-answer');
+    const open = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(o => { o.classList.remove('open'); o.querySelector('.faq-answer').style.maxHeight = '0'; });
+    if (!open) { item.classList.add('open'); ans.style.maxHeight = ans.scrollHeight + 'px'; }
+  });
+});
+
+// WHYカルーセル - マウス位置による自動スクロール
+(function(){
+  const track = document.getElementById('whyTrack');
+  if(!track) return;
+  const cards = Array.from(track.querySelectorAll('.why-card'));
+  const dotsEl = document.getElementById('whyDots');
+  const prog = document.getElementById('whyProg');
+  const prevBtn = document.getElementById('whyPrev');
+  const nextBtn = document.getElementById('whyNext');
+  const wrap = track.parentElement;
+  const total = cards.length;
+  let scrollX = 0;
+  let targetX = 0;
+  let mouseVel = 0;
+  let isHovering = false;
+  let rafId = null;
+  let cur = 0;
+
+  // ドット生成
+  cards.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'why-dot' + (i === 0 ? ' on' : '');
+    d.onclick = () => snapTo(i);
+    dotsEl.appendChild(d);
+  });
+
+  const vis = () => window.innerWidth < 600 ? 1 : window.innerWidth < 1000 ? 2 : 3;
+  const cardW = () => cards[0].offsetWidth + 16;
+  const maxScroll = () => Math.max(0, (total - vis()) * cardW());
+
+  function updateDots() {
+    cur = Math.round(scrollX / cardW());
+    cur = Math.max(0, Math.min(cur, total - vis()));
+    Array.from(dotsEl.children).forEach((d, j) => d.classList.toggle('on', j === cur));
+    prog.style.width = (scrollX / maxScroll() * 100) + '%';
+    if(prevBtn) prevBtn.disabled = scrollX <= 0;
+    if(nextBtn) nextBtn.disabled = scrollX >= maxScroll();
+  }
+
+  function snapTo(i) {
+    targetX = Math.max(0, Math.min(i * cardW(), maxScroll()));
+    mouseVel = 0;
+  }
+
+  window.whyMove = dir => snapTo(cur + dir);
+  window.whyGo = snapTo;
+
+  // マウス位置検出
+  wrap.addEventListener('mouseenter', () => { isHovering = true; });
+  wrap.addEventListener('mouseleave', () => {
+    isHovering = false;
+    mouseVel = 0;
+    // スナップ
+    const nearest = Math.round(scrollX / cardW());
+    snapTo(nearest);
+  });
+
+  wrap.addEventListener('mousemove', e => {
+    const rect = wrap.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width; // 0〜1
+    const deadZone = 0.3; // 中央30%はニュートラル
+    if(x < 0.5 - deadZone/2) {
+      // 左ゾーン：左スクロール
+      const intensity = (0.5 - deadZone/2 - x) / (0.5 - deadZone/2);
+      mouseVel = -intensity * 4;
+    } else if(x > 0.5 + deadZone/2) {
+      // 右ゾーン：右スクロール
+      const intensity = (x - 0.5 - deadZone/2) / (0.5 - deadZone/2);
+      mouseVel = intensity * 4;
+    } else {
+      mouseVel = 0;
+    }
+  });
+
+  // カーソル表示
+  wrap.style.cursor = 'none';
+  const cursor = document.createElement('div');
+  cursor.id = 'whyCursor';
+  cursor.style.cssText = `
+    position:fixed;pointer-events:none;z-index:9999;
+    width:56px;height:56px;border-radius:50%;
+    background:rgba(17,30,58,0.9);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;color:#c8a96e;
+    transform:translate(-50%,-50%) scale(0);
+    transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),opacity 0.2s;
+    font-family:'Space Mono',monospace;
+    opacity:0;
+  `;
+  document.body.appendChild(cursor);
+
+  wrap.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    cursor.style.opacity = '1';
+  });
+  wrap.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(0)';
+    cursor.style.opacity = '0';
+    wrap.style.cursor = 'none';
+  });
+
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+
+    // カーソル内テキスト更新
+    const rect = wrap.getBoundingClientRect();
+    const inWrap = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+    if(inWrap) {
+      const x = (e.clientX - rect.left) / rect.width;
+      const dead = 0.3;
+      if(x < 0.5 - dead/2) { cursor.textContent = '←'; }
+      else if(x > 0.5 + dead/2) { cursor.textContent = '→'; }
+      else { cursor.textContent = '·'; }
+    }
+  });
+
+  // アニメーションループ
+  function loop() {
+    if(isHovering && mouseVel !== 0) {
+      targetX += mouseVel;
+      targetX = Math.max(0, Math.min(targetX, maxScroll()));
+    }
+    // イージング
+    scrollX += (targetX - scrollX) * 0.08;
+    scrollX = Math.max(0, Math.min(scrollX, maxScroll()));
+
+    track.style.transform = `translateX(-${scrollX}px)`;
+    updateDots();
+    rafId = requestAnimationFrame(loop);
+  }
+  loop();
+
+  // タッチ
+  let sx = 0;
+  wrap.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, {passive:true});
+  wrap.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    if(Math.abs(dx) > 40) snapTo(cur + (dx < 0 ? 1 : -1));
+  }, {passive:true});
+
+  window.addEventListener('resize', () => snapTo(Math.min(cur, total - vis())));
+  snapTo(0);
+})();
+const steps = document.querySelectorAll('.workflow-step');
+const navItems = document.querySelectorAll('.workflow-nav-item');
+let workflowLocked = false;
+let lockTimer = null;
+
+function setStep(idx) {
+  steps.forEach(s => s.classList.remove('active'));
+  navItems.forEach(n => n.classList.remove('active'));
+  document.querySelector(`.workflow-step[data-step="${idx}"]`)?.classList.add('active');
+  document.querySelector(`.workflow-nav-item[data-step="${idx}"]`)?.classList.add('active');
+}
+
+function lockStep0() {
+  workflowLocked = true;
+  setStep('0');
+  clearTimeout(lockTimer);
+  lockTimer = setTimeout(() => { workflowLocked = false; }, 1400);
+}
+
+// スクロール位置ベースの自動検知
+function updateWorkflow() {
+  if (workflowLocked) return;
+  const center = window.innerHeight / 2 + window.scrollY;
+  let closest = null;
+  let closestDist = Infinity;
+  steps.forEach(s => {
+    const rect = s.getBoundingClientRect();
+    const stepCenter = rect.top + window.scrollY + rect.height / 2;
+    const dist = Math.abs(center - stepCenter);
+    if (dist < closestDist) { closestDist = dist; closest = s; }
+  });
+  if (closest) setStep(closest.dataset.step);
+}
+window.addEventListener('scroll', updateWorkflow, { passive: true });
+
+// ナビリンク「ご利用の流れ」クリック時にStep01固定
+document.querySelector('a[href="#workflow"]')?.addEventListener('click', () => {
+  setTimeout(lockStep0, 100);
+});
+
+// セクション入場時もStep01にリセット
+const workflowSection = document.getElementById('workflow');
+let prevVisible = false;
+const sectionObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !prevVisible) { lockStep0(); }
+    prevVisible = e.isIntersecting;
+  });
+}, { threshold: 0.05 });
+if (workflowSection) sectionObs.observe(workflowSection);
+
+navItems.forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelector(`.workflow-step[data-step="${item.dataset.step}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+});
+
+// チャット式ヒアリング
+(function(){
+  const chat = document.getElementById('chatMessages');
+  const prog = document.getElementById('chatProg');
+  if(!chat) return;
+  const csteps = [
+    {q:'はじめまして。ClipDockのご利用シミュレーションへようこそ。\nまず、どんなお仕事をされていますか？',hint:'最も近いものを選んでください',type:'choice',key:'業種',choices:['飲食・カフェ・食品','美容・サロン・ヘルスケア','小売・EC・ネットショップ','採用・人材・HR','サービス業・士業・コンサル','その他']},
+    {q:'ありがとうございます。\nどんな用途で動画を使いたいですか？',hint:'複数選んでOKです',type:'multi',key:'用途',choices:['SNS投稿・リール','Meta・SNS広告','採用・求人発信','LP・Webサイト','店頭モニター・営業資料']},
+    {q:'今、手元にある素材を教えてください。',hint:'',type:'choice',key:'手元の素材',choices:['商品写真・サービス写真がある','ロゴだけある','写真もロゴもある','何もない（これから用意）']},
+    {q:'毎月どのくらいの頻度で投稿・配信したいですか？',hint:'',type:'choice',key:'投稿頻度',choices:['週1〜2本','週3〜4本','ほぼ毎日','まだ決めていない']},
+    {q:'気になるプランはありますか？\nあとで変更も相談もできるので、気軽に選んでください。',hint:'',type:'choice',key:'プラン',choices:['Starter（¥9,800 / 月・5本）','Standard（¥29,800 / 月・20本）','Growth（¥59,800 / 月・40本）','まだわからない']},
+    {q:'お名前を教えてください。',hint:'',type:'input',key:'name',placeholder:'お名前'},
+    {q:'メールアドレスも教えてください。',hint:'',type:'input',key:'email',placeholder:'メールアドレス'},
+    {q:'最後に、気になることや要望があれば自由に書いてください。\nもちろん空欄でも大丈夫です。',hint:'業種・規模・予算感・納期など、なんでも',type:'textarea',key:'備考',placeholder:'例：美容室を一人で経営しています。Instagramに力を入れたいのですが、何から始めればいいか分かっていません。まず相談だけでもしてみたいです。'}
+  ];
+  const cans = {};
+  let ccur = 0;
+  let cmulti = [];
+  let cStarted = false;
+
+  function cBubble(text,cls,delay){return new Promise(r=>{setTimeout(()=>{const b=document.createElement('div');b.className='cbubble '+cls;b.textContent=text;chat.appendChild(b);chat.scrollTop=chat.scrollHeight;r();},delay||0);});}
+  function cTyping(ms){return new Promise(r=>{const t=document.createElement('div');t.className='ctyping';t.innerHTML='<div class="cdot"></div><div class="cdot"></div><div class="cdot"></div>';chat.appendChild(t);chat.scrollTop=chat.scrollHeight;setTimeout(()=>{t.remove();r();},ms||700);});}
+  function cProg(){prog.style.width=Math.round((ccur/csteps.length)*100)+'%';}
+
+  async function cStep(i){
+    if(i>=csteps.length){cSummary();return;}
+    const s=csteps[i];cProg();
+    await cTyping(600);
+    for(const line of s.q.split('\n')) await cBubble(line,'bot');
+    if(s.hint) await cBubble(s.hint,'hint',100);
+    if(s.type==='choice') cChoices(s,false);
+    else if(s.type==='multi') cChoices(s,true);
+    else if(s.type==='input') cInput(s);
+    else if(s.type==='textarea') cTextarea(s);
+  }
+
+  function cChoices(s,multi){
+    cmulti=[];
+    const wrap=document.createElement('div');wrap.className='cchoices';
+    wrap.style.cssText='opacity:0;transform:translateY(8px);transition:all 0.3s;';
+    s.choices.forEach(c=>{
+      const btn=document.createElement('button');btn.className='cchoice';btn.textContent=c;
+      btn.onclick=()=>{
+        if(!multi){cans[s.key]=c;cBubble(c,'user');wrap.remove();ccur++;setTimeout(()=>cStep(ccur),400);}
+        else{
+          btn.classList.toggle('selected');
+          if(btn.classList.contains('selected')) cmulti.push(c); else cmulti=cmulti.filter(x=>x!==c);
+          let conf=wrap.querySelector('.cconf');
+          if(cmulti.length>0&&!conf){conf=document.createElement('button');conf.className='cchoice cconf';conf.style.cssText='background:var(--accent);color:var(--navy);border-color:var(--accent);';conf.textContent='決定 →';conf.onclick=()=>{cans[s.key]=cmulti.join('・');cBubble(cmulti.join('、'),'user');wrap.remove();ccur++;setTimeout(()=>cStep(ccur),400);};wrap.appendChild(conf);}
+          if(cmulti.length===0&&conf) conf.remove();
+        }
+      };
+      wrap.appendChild(btn);
+    });
+    chat.appendChild(wrap);chat.scrollTop=chat.scrollHeight;
+    setTimeout(()=>{wrap.style.opacity='1';wrap.style.transform='translateY(0)';},50);
+  }
+
+  function cInput(s){
+    const row=document.createElement('div');row.className='cinput-row';
+    const inp=document.createElement('input');inp.placeholder=s.placeholder;inp.type=s.key==='email'?'email':'text';
+    const btn=document.createElement('button');btn.textContent='次へ';
+    const submit=()=>{if(!inp.value.trim())return;cans[s.key]=inp.value.trim();cBubble(inp.value.trim(),'user');row.remove();ccur++;setTimeout(()=>cStep(ccur),400);};
+    btn.onclick=submit;inp.onkeydown=e=>{if(e.key==='Enter')submit();};
+    row.appendChild(inp);row.appendChild(btn);chat.appendChild(row);inp.focus();chat.scrollTop=chat.scrollHeight;
+  }
+
+  function cTextarea(s){
+    const wrap=document.createElement('div');wrap.className='ctextarea-wrap';
+    wrap.style.cssText='opacity:0;transform:translateY(8px);transition:all 0.3s;';
+    const ta=document.createElement('textarea');ta.placeholder=s.placeholder;
+    const acts=document.createElement('div');acts.className='ctextarea-actions';
+    const skip=document.createElement('button');skip.className='cskip';skip.textContent='スキップ';
+    const send=document.createElement('button');send.textContent='送信する →';
+    const submit=val=>{cans[s.key]=val||'（記入なし）';if(val) cBubble(val.length>40?val.slice(0,40)+'…':val,'user');else cBubble('スキップしました','hint');wrap.remove();ccur++;setTimeout(()=>cStep(ccur),400);};
+    skip.onclick=()=>submit('');send.onclick=()=>submit(ta.value.trim());
+    ta.onkeydown=e=>{if(e.key==='Enter'&&e.metaKey)submit(ta.value.trim());};
+    acts.appendChild(skip);acts.appendChild(send);wrap.appendChild(ta);wrap.appendChild(acts);
+    chat.appendChild(wrap);ta.focus();chat.scrollTop=chat.scrollHeight;
+    setTimeout(()=>{wrap.style.opacity='1';wrap.style.transform='translateY(0)';},50);
+  }
+
+  async function cSummary(){
+    prog.style.width='100%';
+    await cTyping(800);
+    await cBubble('お疲れさまでした。ここまで答えてくれてありがとうございます。','bot');
+    await cTyping(500);
+    await cBubble('内容を確認してみてください。このまま相談に進めます。','bot',200);
+    const card=document.createElement('div');card.className='csummary';
+    card.style.cssText='opacity:0;transform:translateY(12px);transition:all 0.4s;';
+    [['業種',cans['業種']],['用途',cans['用途']],['手元の素材',cans['手元の素材']],['投稿頻度',cans['投稿頻度']],['プラン',cans['プラン']],['お名前',cans['name']],['メール',cans['email']],['ご要望・相談',cans['備考']]].forEach(([l,v])=>{
+      if(!v)return;const row=document.createElement('div');row.className='csummary-row';
+      row.innerHTML='<span class="csummary-label">'+l+'</span><span class="csummary-value">'+v+'</span>';
+      card.appendChild(row);
+    });
+    const fb=document.createElement('button');fb.className='cfinal-btn';fb.textContent='この内容で相談してみる →';
+    fb.onclick=()=>{fb.textContent='送信しました。近日中にご連絡します。';fb.style.background='#1a5c3a';fb.disabled=true;};
+    const rb=document.createElement('button');rb.className='crestart-btn';rb.textContent='もう一度試す';
+    rb.onclick=()=>{chat.innerHTML='';ccur=0;Object.keys(cans).forEach(k=>delete cans[k]);prog.style.width='0%';cStarted=false;setTimeout(()=>cStep(0),200);};
+    card.appendChild(fb);card.appendChild(rb);chat.appendChild(card);chat.scrollTop=chat.scrollHeight;
+    setTimeout(()=>{card.style.opacity='1';card.style.transform='translateY(0)';},100);
+  }
+
+  // セクションに入ったら開始
+  const contactSection=document.getElementById('contact');
+  const startObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting&&!cStarted){cStarted=true;setTimeout(()=>cStep(0),400);}});
+  },{threshold:0.2});
+  if(contactSection) startObs.observe(contactSection);
+})();
+
+</script>
+</body>
+</html>
