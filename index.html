@@ -355,20 +355,49 @@ footer{background:#050810;padding:40px 80px;display:flex;align-items:center;just
 /* MOBILE */
 @media(max-width:900px){
   nav{padding:16px 24px;}.nav-links{display:none;}
-  .section-inner{padding:80px 24px;}
-  .workflow-section .section-inner{padding:64px 24px 80px;}
-  .hero-title{font-size:clamp(36px,8vw,56px);}
+  .section-inner{padding:64px 24px;}
+  .workflow-section .section-inner{padding:48px 24px 64px;}
+  .hero-title{font-size:clamp(32px,8vw,52px);}
   .usecases-grid,.why-grid{grid-template-columns:1fr;}
-  .pricing-grid{grid-template-columns:1fr 1fr;}
-  .workflow-layout{grid-template-columns:1fr;}
-  .workflow-nav{display:none;}.workflow-step{opacity:1;}
-  .step-tiles{grid-template-columns:1fr;}
-  .final-cta{padding:100px 24px;}
+  /* revealアニメーションをモバイルでは無効化 — transformによる空白を防ぐ */
+  .reveal,.reveal-left,.reveal-delay-1,.reveal-delay-2,.reveal-delay-3,.reveal-delay-4{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
+  }
+  .pricing-grid{grid-template-columns:1fr;margin-top:40px;}
+  .pricing-card{padding:32px 24px;transform:none !important;}
+  .pricing-card:hover{transform:none !important;}
+  .workflow-layout{grid-template-columns:1fr;gap:32px;margin-top:32px;}
+  .workflow-nav{display:none;}
+  .workflow-step{opacity:1;}
+  .workflow-steps{gap:32px;}
+  .step-header{gap:12px;margin-bottom:16px;}
+  .step-num{font-size:44px;}
+  .step-title{font-size:20px;}
+  .step-tiles{grid-template-columns:1fr;gap:8px;}
+  .step-tile{padding:14px;}
+  .final-cta{padding:80px 24px;}
   footer{flex-direction:column;gap:12px;text-align:center;padding:32px 24px;}
   .form-row{grid-template-columns:1fr;}
-  .monitor-band{padding:60px 24px;}
+  .monitor-band{padding:48px 24px;}
+  .firstmonth-layout{grid-template-columns:1fr;gap:40px;}
+  .firstmonth-inner{padding:64px 24px;}
+  .why-carousel{margin-top:32px;}
+  .why-card{width:260px;}
+  .ai-examples-grid{grid-template-columns:1fr;}
+  .ai-analogy{grid-template-columns:1fr;gap:16px;}
+  .ai-how-steps{grid-template-columns:1fr;gap:16px;}
 }
-@media(max-width:540px){.pricing-grid{grid-template-columns:1fr;}}
+@media(max-width:540px){
+  .hero-title{font-size:clamp(28px,9vw,44px);}
+  .section-title{font-size:clamp(24px,6vw,36px);}
+  .hero-sub{font-size:13px;}
+  .btn-accent,.btn-ghost-white{padding:15px 28px;font-size:13px;}
+  .hero-actions{flex-direction:column;gap:12px;width:100%;}
+  .hero-actions a{width:100%;text-align:center;}
+  .pricing-grid{grid-template-columns:1fr;}
+}
 /* FIRST MONTH SECTION */
 .firstmonth-section{background:linear-gradient(160deg,#0d1628 0%,#111e3a 50%,#0a1220 100%);position:relative;overflow:hidden;}
 .firstmonth-section::before{content:'';position:absolute;top:-300px;right:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(200,169,110,0.07) 0%,transparent 60%);pointer-events:none;}
