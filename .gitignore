@@ -1,0 +1,18 @@
+# 社内文書・機密ファイル（GitHubに上げない）
+*.docx
+*.xlsx
+*.pptx
+*.pdf
+*.doc
+*.xls
+
+# 環境設定・APIキー
+.env
+.env.*
+*.key
+*.pem
+
+# OS・エディタのゴミファイル
+.DS_Store
+Thumbs.db
+desktop.ini
