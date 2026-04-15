@@ -132,7 +132,7 @@ nav.scrolled{padding:14px 56px;background:rgba(8,12,28,0.95);}
 
 /* MARQUEE TEXT */
 .marquee-section{overflow:hidden;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);padding:18px 0;background:rgba(255,255,255,0.015);}
-.marquee-track{display:flex;animation:marquee 28s linear infinite;width:max-content;}
+.marquee-track{display:flex;animation:marquee 55s linear infinite;width:max-content;}
 .marquee-item{display:flex;align-items:center;gap:28px;padding:0 28px;white-space:nowrap;font-family:'DM Serif Display',serif;font-size:14px;letter-spacing:0.05em;color:rgba(255,255,255,0.2);}
 .marquee-dot{color:var(--accent);font-size:9px;}
 @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
@@ -212,15 +212,16 @@ section{position:relative;}
   background:var(--accent);
   pointer-events:none;
   opacity:0;
-  animation:special-float-up linear infinite;
+  animation:special-float-up ease-in-out infinite;
 }
 @keyframes special-float-up{
-  0%  { transform:translateY(0)   translateX(0)    scale(0.6); opacity:0;   }
-  8%  { opacity:0.7; }
-  30% { transform:translateY(-28%) translateX(12px)  scale(1);   opacity:0.5; }
-  55% { transform:translateY(-55%) translateX(-10px) scale(0.9); opacity:0.4; }
-  80% { transform:translateY(-80%) translateX(8px)  scale(1.05);opacity:0.2; }
-  100%{ transform:translateY(-110%) translateX(-6px) scale(0.7); opacity:0;   }
+  0%  { transform:translateY(0)    translateX(0px);   opacity:0;   }
+  6%  { opacity:0.85; }
+  25% { transform:translateY(-22%) translateX(18px);  opacity:0.7; }
+  50% { transform:translateY(-48%) translateX(-16px); opacity:0.55;}
+  75% { transform:translateY(-72%) translateX(14px);  opacity:0.3; }
+  92% { opacity:0.1; }
+  100%{ transform:translateY(-105%) translateX(-8px); opacity:0;   }
 }
 .special-inner{max-width:1200px;margin:0 auto;padding:0 80px;position:relative;z-index:2;text-align:center;}
 .special-eyebrow{
@@ -1594,27 +1595,27 @@ for (let i = 0; i < 20; i++) {
 // パーティクル（特別価格セクション）
 const spContainer = document.getElementById('specialParticles');
 if(spContainer){
-  for(let i = 0; i < 40; i++){
+  for(let i = 0; i < 45; i++){
     const p = document.createElement('div');
     p.className = 'special-particle';
-    const size = Math.random() * 5 + 1.5;
-    const duration = Math.random() * 14 + 10; // 10〜24秒
-    const delay = Math.random() * 16;          // 0〜16秒のずれ
-    const startX = Math.random() * 100;        // 横位置
-    const startY = Math.random() * 100;        // 縦位置（セクション内どこからでも）
-    const blur = Math.random() > 0.65 ? `blur(${(Math.random()*1.2+0.3).toFixed(1)}px)` : 'none';
+    const size = Math.random() * 7 + 2.5; // 2.5〜9.5px（大きめ）
+    const duration = Math.random() * 8 + 6; // 6〜14秒（速め）
+    const delay = -(Math.random() * 14);   // マイナスで即開始
+    const startX = Math.random() * 100;
+    const startY = Math.random() * 100;
+    const blur = Math.random() > 0.6 ? `blur(${(Math.random()*1.5+0.3).toFixed(1)}px)` : 'none';
+    const glow = Math.random() > 0.7
+      ? `drop-shadow(0 0 ${Math.floor(Math.random()*4+2)}px rgba(200,169,110,0.8))`
+      : 'none';
 
     p.style.cssText = [
       `width:${size}px`,
       `height:${size}px`,
       `left:${startX}%`,
       `top:${startY}%`,
-      `animation-name:special-float-up`,
       `animation-duration:${duration}s`,
-      `animation-delay:-${delay}s`,  // マイナスで即座に開始・ランダム位相
-      `animation-iteration-count:infinite`,
-      `animation-timing-function:ease-in-out`,
-      `filter:${blur}`,
+      `animation-delay:${delay}s`,
+      `filter:${blur === 'none' && glow !== 'none' ? glow : blur}`,
     ].join(';');
     spContainer.appendChild(p);
   }
