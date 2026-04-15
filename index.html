@@ -185,12 +185,170 @@ section{position:relative;}
 /* MONITOR BAND */
 .monitor-band{background:linear-gradient(135deg,#c8a96e 0%,#e8c97e 45%,#b8943a 100%);padding:80px;text-align:center;position:relative;overflow:hidden;}
 .monitor-band::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 10px,rgba(255,255,255,0.04) 10px,rgba(255,255,255,0.04) 20px);}
-.monitor-band .section-eyebrow{justify-content:center;color:rgba(26,39,68,0.6);}
-.monitor-band .section-eyebrow::before{background:rgba(26,39,68,0.3);}
-.monitor-title{font-family:'DM Serif Display',serif;font-size:clamp(28px,3.5vw,48px);color:var(--navy);line-height:1.2;margin-bottom:16px;}
-.monitor-desc{font-size:15px;color:rgba(26,39,68,0.6);margin-bottom:40px;line-height:1.8;max-width:460px;margin-left:auto;margin-right:auto;}
-.btn-navy{background:var(--navy);color:var(--white);padding:18px 44px;border-radius:3px;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:0.04em;display:inline-block;transition:all 0.25s;}
-.btn-navy:hover{background:var(--navy-light);transform:translateY(-2px);box-shadow:0 14px 44px rgba(17,30,58,0.3);}
+/* SPECIAL PRICE SECTION */
+.special-section{
+  background:linear-gradient(135deg,#060a18 0%,#0d1628 40%,#111e3a 70%,#080f20 100%);
+  position:relative;overflow:hidden;padding:120px 0;
+}
+.special-section::before{
+  content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);
+  width:900px;height:900px;
+  background:radial-gradient(circle,rgba(200,169,110,0.12) 0%,transparent 60%);
+  pointer-events:none;
+}
+.special-section::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 80px,rgba(200,169,110,0.015) 80px,rgba(200,169,110,0.015) 81px),
+             repeating-linear-gradient(90deg,transparent,transparent 80px,rgba(200,169,110,0.015) 80px,rgba(200,169,110,0.015) 81px);
+  pointer-events:none;
+}
+.special-inner{max-width:1200px;margin:0 auto;padding:0 80px;position:relative;z-index:1;text-align:center;}
+.special-eyebrow{
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.25em;
+  color:var(--accent);text-transform:uppercase;margin-bottom:32px;
+  display:flex;align-items:center;justify-content:center;gap:16px;
+}
+.special-eyebrow-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);display:inline-block;}
+.special-title{
+  font-family:'DM Serif Display',serif;font-size:clamp(38px,5vw,72px);
+  color:var(--white);line-height:1.1;margin-bottom:24px;
+}
+.special-title em{font-style:italic;color:var(--accent);}
+.special-sub{font-size:15px;color:rgba(255,255,255,0.45);line-height:1.9;margin-bottom:72px;max-width:560px;margin-left:auto;margin-right:auto;}
+.special-sub strong{color:rgba(255,255,255,0.75);}
+
+/* カード群 */
+.special-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:960px;margin:0 auto 56px;background:rgba(200,169,110,0.1);border:1px solid rgba(200,169,110,0.15);border-radius:16px;overflow:hidden;}
+.special-card{background:rgba(8,14,30,0.95);padding:48px 36px;position:relative;transition:background 0.3s;}
+.special-card:hover{background:rgba(15,25,50,0.98);}
+.special-card-featured{background:linear-gradient(160deg,rgba(200,169,110,0.12) 0%,rgba(8,14,30,0.98) 60%);}
+.special-card-badge{
+  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.15em;
+  background:var(--accent);color:var(--navy);padding:4px 12px;border-radius:20px;
+  display:inline-block;margin-bottom:20px;text-transform:uppercase;font-weight:700;
+}
+.special-card-plan{
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.15em;
+  color:rgba(255,255,255,0.3);text-transform:uppercase;margin-bottom:28px;
+}
+.special-card-prices{position:relative;margin-bottom:24px;}
+.special-price-original{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:12px;position:relative;
+}
+.special-price-label{font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:0.1em;}
+.special-price-num{
+  font-family:'DM Serif Display',serif;font-size:28px;
+  color:rgba(255,255,255,0.2);letter-spacing:-0.01em;
+  position:relative;
+}
+/* 打ち消し線 — 大胆に */
+.special-strike{
+  position:absolute;top:50%;left:-8px;right:-8px;height:3px;
+  background:linear-gradient(90deg,transparent,rgba(200,60,60,0.9),transparent);
+  transform:translateY(-50%) rotate(-8deg);
+  border-radius:2px;
+}
+.special-price-now{display:flex;align-items:flex-end;justify-content:center;gap:6px;flex-wrap:wrap;}
+.special-price-now-label{
+  font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.1em;
+  color:var(--accent);background:rgba(200,169,110,0.1);
+  padding:3px 8px;border-radius:3px;border:1px solid rgba(200,169,110,0.2);
+  margin-bottom:6px;
+}
+.special-price-now-num{
+  font-family:'DM Serif Display',serif;font-size:clamp(36px,4vw,52px);
+  color:var(--accent);line-height:1;
+}
+.special-card-featured .special-price-now-num{font-size:clamp(44px,5vw,64px);}
+.special-price-period{font-size:13px;color:rgba(255,255,255,0.3);margin-bottom:6px;}
+.special-card-clips{
+  font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:16px;
+  padding-top:20px;border-top:1px solid rgba(255,255,255,0.06);
+}
+.special-card-clips strong{color:rgba(255,255,255,0.7);}
+.special-card-save{
+  display:inline-block;font-family:'Space Mono',monospace;font-size:11px;
+  letter-spacing:0.08em;color:#ff6b6b;
+  background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.2);
+  padding:4px 14px;border-radius:20px;
+}
+.special-note{
+  font-size:13px;color:rgba(255,255,255,0.3);line-height:1.9;margin-bottom:48px;
+}
+.special-deadline{
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.08em;
+  color:var(--accent);background:rgba(200,169,110,0.08);
+  padding:6px 16px;border-radius:4px;border:1px solid rgba(200,169,110,0.15);
+  display:inline-block;margin-bottom:12px;
+}
+.special-cta{
+  display:inline-block;background:var(--accent);color:var(--navy);
+  padding:20px 56px;border-radius:3px;font-size:15px;font-weight:700;
+  text-decoration:none;letter-spacing:0.04em;
+  transition:all 0.25s;position:relative;overflow:hidden;
+}
+.special-cta::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.18);transform:translateX(-100%) skewX(-15deg);transition:transform 0.4s;}
+.special-cta:hover::after{transform:translateX(100%) skewX(-15deg);}
+.special-cta:hover{transform:translateY(-3px);box-shadow:0 20px 56px rgba(200,169,110,0.4);}
+
+/* PORTFOLIO SECTION */
+.portfolio-section{background:var(--navy);}
+.portfolio-section .section-title{color:var(--white);}
+.portfolio-section .section-eyebrow{color:var(--accent);}
+.portfolio-section .section-eyebrow::before{background:var(--accent);}
+.portfolio-section .section-sub{color:rgba(255,255,255,0.4);}
+.portfolio-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:56px;
+}
+.portfolio-item{
+  aspect-ratio:9/16;border-radius:12px;overflow:hidden;
+  position:relative;cursor:pointer;
+  border:1px solid rgba(255,255,255,0.06);
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.35s;
+}
+.portfolio-item:hover{
+  transform:scale(1.04) translateY(-6px);
+  box-shadow:0 32px 64px rgba(0,0,0,0.6),0 0 0 1px rgba(200,169,110,0.3);
+  z-index:2;
+}
+.portfolio-video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;z-index:0;
+}
+.portfolio-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.1) 50%,transparent 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:16px;
+  opacity:0;transition:opacity 0.3s;
+}
+.portfolio-item:hover .portfolio-overlay{opacity:1;}
+.portfolio-tag{
+  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;
+  color:var(--accent);background:rgba(0,0,0,0.5);
+  padding:3px 8px;border-radius:3px;display:inline-block;
+  margin-bottom:8px;backdrop-filter:blur(4px);
+  text-transform:uppercase;
+}
+.portfolio-label{font-size:12px;color:var(--white);font-weight:500;margin-bottom:4px;line-height:1.4;}
+.portfolio-spec{font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);}
+.portfolio-note{
+  margin-top:40px;font-size:12px;color:rgba(255,255,255,0.25);
+  line-height:1.8;text-align:center;
+}
+
+@media(max-width:900px){
+  .special-inner{padding:0 24px;}
+  .special-cards{grid-template-columns:1fr;gap:1px;max-width:420px;}
+  .portfolio-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+}
+@media(max-width:540px){
+  .portfolio-grid{grid-template-columns:repeat(2,1fr);gap:6px;}
+  .special-section{padding:80px 0;}
+}
 
 /* WORKFLOW */
 .workflow-section{background:linear-gradient(180deg,#0d1628 0%,#111e3a 100%);}
@@ -729,13 +887,186 @@ footer{background:#050810;padding:40px 80px;display:flex;align-items:center;just
   </div>
 </section>
 
-<!-- MONITOR BAND -->
-<div class="monitor-band">
-  <div class="section-eyebrow reveal" style="justify-content:center;">🎉 Early Adopter</div>
-  <h2 class="monitor-title reveal">今だけ、モニター価格で<br>受け付けています。</h2>
-  <p class="monitor-desc reveal">サービス立ち上げにあたり、初期モニターとして参加いただける事業者様を募集中です。通常料金より特別な条件でご提供します。</p>
-  <a href="#contact" class="btn-navy reveal">モニターとして相談する</a>
-</div>
+<!-- SPECIAL PRICE SECTION -->
+<section class="special-section" id="special">
+  <div class="special-inner">
+
+    <!-- 眉上ラベル -->
+    <div class="special-eyebrow reveal">
+      <span class="special-eyebrow-dot"></span>
+      サービス開始記念 · Limited Offer
+      <span class="special-eyebrow-dot"></span>
+    </div>
+
+    <h2 class="special-title reveal reveal-delay-1">
+      今だけ、<em>特別価格</em>で<br>始められます。
+    </h2>
+    <p class="special-sub reveal reveal-delay-2">
+      ClipDockのサービス開始を記念し、<strong>2026年7月31日までのご契約に限り</strong>、<br>
+      通常料金より大幅に優遇した特別価格でご提供します。
+    </p>
+
+    <!-- 価格カード群 -->
+    <div class="special-cards reveal reveal-delay-3">
+
+      <!-- Starter -->
+      <div class="special-card">
+        <div class="special-card-plan">Starter</div>
+        <div class="special-card-prices">
+          <div class="special-price-original">
+            <span class="special-price-label">通常</span>
+            <span class="special-price-num">¥19,800</span>
+            <div class="special-strike"></div>
+          </div>
+          <div class="special-price-now">
+            <span class="special-price-now-label">特別価格</span>
+            <span class="special-price-now-num">¥9,800</span>
+            <span class="special-price-period">/ 月</span>
+          </div>
+        </div>
+        <div class="special-card-clips">短尺クリップ <strong>5本</strong> / 月</div>
+        <div class="special-card-save">¥10,000 OFF</div>
+      </div>
+
+      <!-- Standard（推奨） -->
+      <div class="special-card special-card-featured">
+        <div class="special-card-badge">Most Popular</div>
+        <div class="special-card-plan">Standard</div>
+        <div class="special-card-prices">
+          <div class="special-price-original">
+            <span class="special-price-label">通常</span>
+            <span class="special-price-num">¥49,800</span>
+            <div class="special-strike"></div>
+          </div>
+          <div class="special-price-now">
+            <span class="special-price-now-label">特別価格</span>
+            <span class="special-price-now-num">¥29,800</span>
+            <span class="special-price-period">/ 月</span>
+          </div>
+        </div>
+        <div class="special-card-clips">短尺クリップ <strong>20本</strong> / 月</div>
+        <div class="special-card-save">¥20,000 OFF</div>
+      </div>
+
+      <!-- Growth -->
+      <div class="special-card">
+        <div class="special-card-plan">Growth</div>
+        <div class="special-card-prices">
+          <div class="special-price-original">
+            <span class="special-price-label">通常</span>
+            <span class="special-price-num">¥89,800</span>
+            <div class="special-strike"></div>
+          </div>
+          <div class="special-price-now">
+            <span class="special-price-now-label">特別価格</span>
+            <span class="special-price-now-num">¥59,800</span>
+            <span class="special-price-period">/ 月</span>
+          </div>
+        </div>
+        <div class="special-card-clips">短尺クリップ <strong>40本</strong> / 月</div>
+        <div class="special-card-save">¥30,000 OFF</div>
+      </div>
+
+    </div>
+
+    <!-- 注記 -->
+    <div class="special-note reveal">
+      <span class="special-deadline">⏳ 特別価格の受付は 2026年7月31日まで</span><br>
+      期間内にご相談いただいた方は、継続してこの価格が適用されます。
+    </div>
+
+    <a href="#contact" class="special-cta reveal">この価格で相談してみる →</a>
+
+  </div>
+</section>
+
+<!-- PORTFOLIO SECTION -->
+<section class="portfolio-section" id="portfolio">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Portfolio</div>
+    <h2 class="section-title reveal reveal-delay-1">納品クリップ、<br><em style="font-style:italic;color:var(--accent);">サンプルギャラリー。</em></h2>
+    <p class="section-sub reveal reveal-delay-2">実際に生成・納品しているクリップのサンプルです。御社の業種・訴求に合わせて、毎月このクオリティで制作します。</p>
+
+    <div class="portfolio-grid reveal reveal-delay-3">
+
+      <div class="portfolio-item">
+        <video class="portfolio-video" autoplay muted loop playsinline src="clip-01-cafe.mp4"></video>
+        <div class="portfolio-overlay">
+          <span class="portfolio-tag">投稿用 · 飲食</span>
+          <div class="portfolio-label">カフェ・飲食の雰囲気映像</div>
+          <div class="portfolio-spec">6s · 9:16</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <video class="portfolio-video" autoplay muted loop playsinline src="clip-02-product.mp4"></video>
+        <div class="portfolio-overlay">
+          <span class="portfolio-tag">広告用 · 商品</span>
+          <div class="portfolio-label">商品・パッケージのビジュアル</div>
+          <div class="portfolio-spec">8s · 9:16</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <video class="portfolio-video" autoplay muted loop playsinline src="clip-03-office.mp4"></video>
+        <div class="portfolio-overlay">
+          <span class="portfolio-tag">求人用 · 採用</span>
+          <div class="portfolio-label">職場・採用イメージ映像</div>
+          <div class="portfolio-spec">6s · 9:16</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <video class="portfolio-video" autoplay muted loop playsinline src="clip-04-beauty.mp4"></video>
+        <div class="portfolio-overlay">
+          <span class="portfolio-tag">投稿用 · 美容</span>
+          <div class="portfolio-label">美容・サロンの世界観</div>
+          <div class="portfolio-spec">8s · 9:16</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <video class="portfolio-video" autoplay muted loop playsinline src="clip-05-brand.mp4"></video>
+        <div class="portfolio-overlay">
+          <span class="portfolio-tag">LP用 · ブランド</span>
+          <div class="portfolio-label">ブランドの世界観映像</div>
+          <div class="portfolio-spec">7s · 9:16</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <video class="portfolio-video" autoplay muted loop playsinline src="clip-06-store.mp4"></video>
+        <div class="portfolio-overlay">
+          <span class="portfolio-tag">SNS用 · 店舗</span>
+          <div class="portfolio-label">店舗・外観の印象づくり</div>
+          <div class="portfolio-spec">6s · 9:16</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <video class="portfolio-video" autoplay muted loop playsinline src="clip-07-service.mp4"></video>
+        <div class="portfolio-overlay">
+          <span class="portfolio-tag">広告用 · サービス</span>
+          <div class="portfolio-label">サービス紹介・B2B映像</div>
+          <div class="portfolio-spec">8s · 9:16</div>
+        </div>
+      </div>
+
+      <div class="portfolio-item">
+        <video class="portfolio-video" autoplay muted loop playsinline src="clip-08-abstract.mp4"></video>
+        <div class="portfolio-overlay">
+          <span class="portfolio-tag">採用用 · 世界観</span>
+          <div class="portfolio-label">抽象・ブランド世界観映像</div>
+          <div class="portfolio-spec">7s · 9:16</div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="portfolio-note reveal">※ すべて実際にSeedance 2.0で生成したクリップです。御社専用に一から生成するため、同じ映像が他社に提供されることはありません。</p>
+
+  </div>
+</section>
 
 <!-- WORKFLOW -->
 <section class="workflow-section" id="workflow">
